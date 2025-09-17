@@ -15,7 +15,8 @@ Kullanýlan Teknolojiler ve Servisler:
 - Mapping: AutoMapper
 - Logging: Serilog (console ve MSSQL sink'i ile günlükleme)
 - Saðlýk Kontrolleri: ASP.NET Core Health Checks (SQL Server health check)
-- Rate Limiting: .NET rate limiting / basit in-memory uygulama (özelleþtirilebilir)
+- Rate Limiting: .NET rate limiting (Fixed Window limiter) ve ek olarak proje içinde basit in-memory uygulama örneði bulunmaktadýr. Üretim için Redis veya daðýtýk cache tabanlý çözüm önerilir.
+- Unit Testler: xUnit test framework'ü kullanýlmýþtýr. Testler TeknikServis.Test projesinde yer alýr; baðýmsýz birim testleri için mock/kopyalama ve DI üzerinden izole testler yazýlabilir.
 - API Dokümantasyonu: Swagger (Swashbuckle)
 - Diðer: Generic Repository pattern, Scrutor ile servis tarama, Docker & Docker Compose ile konteynerizasyon
 
@@ -25,4 +26,19 @@ Proje Çalýþtýrma (Docker ile):
   docker-compose up -d --build
 - API, varsayýlan yapýlandýrmada host üzerinde http://localhost:5000 adresinde dinler.
 
-Unit Test
+Unit Testler:
+- Projede "TeknikServis.Test" adýnda bir test projesi bulunmaktadýr.
+- Testleri çalýþtýrmak için kök dizinden þu komutu kullanýn:
+  dotnet test
+- Test altyapýsý için xUnit kullanýlmýþtýr (örnek test sýnýfý: TeknikServis.Test/UnitTest1.cs).
+
+Proje Deðerlendirmesi (Senior Ýmajý):
+- Proje mimarisi katmanlý, SOLID ilkelerine uygun ve kurumsal uygulamalar için gerekli altyapý bileþenlerini içerir.
+- Otomatik saðlýk kontrolleri, merkezi loglama (Serilog -> MSSQL), kimlik yönetimi, doðrulama, rate limiting ve Docker desteði gibi üretim odaklý özellikler bulunur.
+- Bu sebeplerle proje, "Senior" seviyesinde bir profesyonel proje imajý sunar. (Kod kalitesi ve mimari yaklaþýmýnýn kurumsal gereksinimler doðrultusunda olgun olduðu varsayýmýyla.)
+
+Geliþtirme ve Katký:
+- Projeye katký için fork ve pull request akýþý kullanýlabilir.
+
+Ýletiþim:
+- Lead developer: Ali CAN YUCEL
