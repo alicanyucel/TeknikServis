@@ -1,6 +1,7 @@
 using DefaultCorsPolicyNugetPackage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
@@ -8,32 +9,34 @@ using Serilog;
 using Serilog.Sinks.MSSqlServer;
 using System.Data;
 using System.Text.Json;
+using System.Threading.RateLimiting;
 using TeknikServis.Application;
 using TeknikServis.Infrastructure;
 using TeknikServis.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("SqlServer");
-var columnOptions = new ColumnOptions();
+var connectionString = builder.Configuration.GetConnectionString("SqlServer")
+                       ?? "Data Source=DESKTOP-L6NJT48\\SQLEXPRESS;Initial Catalog=ServisDatabaeseSon;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
+var columnOptions = new ColumnOptions();
+columnOptions.Store.Remove(StandardColumn.Properties);
+columnOptions.Store.Add(StandardColumn.LogEvent);
 
 Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
     .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.Console(
+        outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
     .WriteTo.MSSqlServer(
-        connectionString,
+        connectionString: connectionString,
         sinkOptions: new MSSqlServerSinkOptions
         {
-            TableName = "logs",           
-            AutoCreateSqlTable = true   
+            TableName = "Logs",
+            AutoCreateSqlTable = true
         },
-        columnOptions: columnOptions,
-        restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information
+        columnOptions: columnOptions
     )
     .CreateLogger();
-
-builder.Host.UseSerilog();
 
 builder.Services.AddDefaultCors();
 builder.Services.AddApplication();
@@ -41,7 +44,14 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddExceptionHandler<ExceptionHandler>();
 builder.Services.AddProblemDetails();
-
+builder.Services.AddRateLimiter(x =>
+x.AddFixedWindowLimiter("fixed", cfg =>
+{
+    cfg.QueueLimit = 100;
+    cfg.Window = TimeSpan.FromSeconds(1);
+    cfg.PermitLimit = 100;
+    cfg.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+}));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(setup =>
@@ -147,5 +157,4 @@ app.MapHealthChecks("/health/live", new HealthCheckOptions
 });
 
 ExtensionsMiddleware.CreateFirstUser(app);
-
 app.Run();
