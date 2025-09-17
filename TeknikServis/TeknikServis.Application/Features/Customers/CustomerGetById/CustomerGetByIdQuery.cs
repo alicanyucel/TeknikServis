@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TeknikServis.Domain.Entities;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.Customers.CustomerGetById
-{
-    internal class CustomerGetByIdQuery
-    {
-    }
-}
+namespace TeknikServis.Application.Features.Customers.CustomerGetById;
+
+public sealed record GetCustomerByIdQuery(Guid Id) : IRequest<Result<Customer>>;
