@@ -1,15 +1,15 @@
-﻿using GenericRepository;
-using MediatR;
+﻿using MediatR;
 using TeknikServis.Domain.Entities;
+using TeknikServis.Domain.Repositories;
 using TS.Result;
 
 namespace TeknikServis.Application.Features.Customers.CustomerGetById;
 
 public sealed class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery, Result<Customer>>
 {
-    private readonly IRepository<Customer> _customerRepository;
+    private readonly ICustomerRepository _customerRepository;
 
-    public GetCustomerByIdQueryHandler(IRepository<Customer> customerRepository)
+    public GetCustomerByIdQueryHandler(ICustomerRepository customerRepository)
     {
         _customerRepository = customerRepository;
     }
