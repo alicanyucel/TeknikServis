@@ -11,6 +11,8 @@ using System.Text;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Infrastructure.Context;
 using TeknikServis.Infrastructure.Options;
+using System.Text.Json.Serialization;
+using TeknikServis.Infrastructure.Converters;
 
 namespace TeknikServis.Infrastructure
 {
@@ -83,6 +85,9 @@ namespace TeknikServis.Infrastructure
                     .AsImplementedInterfaces()
                     .WithScopedLifetime();
             });
+
+            // JSON converters
+            services.AddSingleton<JsonConverterFactory, SmartEnumJsonConverterFactory>();
 
             return services;
         }

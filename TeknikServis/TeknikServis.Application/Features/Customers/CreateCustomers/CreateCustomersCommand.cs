@@ -15,5 +15,5 @@ string Country,
 string ZipCode,
 string District,
 string Neighborhood,
-CustomerType CustomerType
+int CustomerType
 ) : IRequest<Result<string>>;
