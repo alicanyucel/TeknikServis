@@ -15,8 +15,8 @@ using TeknikServis.Infrastructure;
 using TeknikServis.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("SqlServer")
-                       ?? "Data Source=DESKTOP-L6NJT48\\SQLEXPRESS;Initial Catalog=ServisDatabaeseSon;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
+var connectionString = builder.Configuration.GetConnectionString("SqlServer") ??
+    "Data Source=DESKTOP-L6NJT48\\SQLEXPRESS;Initial Catalog=ServisDatabaeseSon;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
 var columnOptions = new ColumnOptions();
 columnOptions.Store.Remove(StandardColumn.Properties);
@@ -25,8 +25,7 @@ columnOptions.Store.Add(StandardColumn.LogEvent);
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .Enrich.FromLogContext()
-    .WriteTo.Console(
-        outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .WriteTo.Console(outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
     .WriteTo.MSSqlServer(
         connectionString: connectionString,
         sinkOptions: new MSSqlServerSinkOptions
@@ -34,29 +33,34 @@ Log.Logger = new LoggerConfiguration()
             TableName = "Logs",
             AutoCreateSqlTable = true
         },
-        columnOptions: columnOptions
-    )
+        columnOptions: columnOptions)
     .CreateLogger();
 
+builder.Host.UseSerilog();
 builder.Services.AddDefaultCors();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddExceptionHandler<ExceptionHandler>();
-builder.Services.AddProblemDetails();
-builder.Services.AddRateLimiter(x =>
-x.AddFixedWindowLimiter("fixed", cfg =>
-{
-    cfg.QueueLimit = 100;
-    cfg.Window = TimeSpan.FromSeconds(1);
-    cfg.PermitLimit = 100;
-    cfg.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-}));
+builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ExceptionHandler>();
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("fixed", cfg =>
+    {
+        cfg.Window = TimeSpan.FromSeconds(1);
+        cfg.PermitLimit = 100;
+        cfg.QueueLimit = 100;
+        cfg.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+});
+
 builder.Services.AddSwaggerGen(setup =>
 {
-    var jwtSecuritySheme = new OpenApiSecurityScheme
+    var jwtSecurityScheme = new OpenApiSecurityScheme
     {
         BearerFormat = "JWT",
         Name = "JWT Authentication",
@@ -64,7 +68,6 @@ builder.Services.AddSwaggerGen(setup =>
         Type = SecuritySchemeType.Http,
         Scheme = JwtBearerDefaults.AuthenticationScheme,
         Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
-
         Reference = new OpenApiReference
         {
             Id = JwtBearerDefaults.AuthenticationScheme,
@@ -72,12 +75,11 @@ builder.Services.AddSwaggerGen(setup =>
         }
     };
 
-    setup.AddSecurityDefinition(jwtSecuritySheme.Reference.Id, jwtSecuritySheme);
-
+    setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
     setup.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { jwtSecuritySheme, Array.Empty<string>() }
-                });
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
 });
 
 var healthChecksBuilder = builder.Services.AddHealthChecks();
@@ -90,8 +92,6 @@ else
     healthChecksBuilder.AddCheck("self", () => HealthCheckResult.Healthy("db configure edilmedi."));
 }
 
-builder.Services.AddMemoryCache();
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -99,13 +99,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
-
 app.UseCors();
-
 app.UseExceptionHandler();
-
+app.UseRateLimiter(); 
 app.Use(async (context, next) =>
 {
     const int LIMIT = 100;
@@ -113,10 +110,11 @@ app.Use(async (context, next) =>
     var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
     var key = $"rate_{ip}";
 
-    if (!cache.TryGetValue<int>(key, out var counter))
+    var counter = cache.GetOrCreate(key, entry =>
     {
-        counter = 0;
-    }
+        entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
+        return 0;
+    });
 
     if (counter >= LIMIT)
     {
@@ -125,12 +123,15 @@ app.Use(async (context, next) =>
         return;
     }
 
-    cache.Set(key, counter + 1, new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) });
+    cache.Set(key, counter + 1, new MemoryCacheEntryOptions
+    {
+        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1)
+    });
+
     await next();
 });
 
 app.MapControllers();
-
 app.MapHealthChecks("/health/ready", new HealthCheckOptions
 {
     Predicate = check => check.Tags != null && check.Tags.Contains("db"),
@@ -140,7 +141,12 @@ app.MapHealthChecks("/health/ready", new HealthCheckOptions
         var result = new
         {
             status = report.Status.ToString(),
-            checks = report.Entries.Select(e => new { name = e.Key, status = e.Value.Status.ToString(), description = e.Value.Description })
+            checks = report.Entries.Select(e => new
+            {
+                name = e.Key,
+                status = e.Value.Status.ToString(),
+                description = e.Value.Description
+            })
         };
         await httpContext.Response.WriteAsync(JsonSerializer.Serialize(result));
     }
@@ -149,7 +155,7 @@ app.MapHealthChecks("/health/ready", new HealthCheckOptions
 app.MapHealthChecks("/health/live", new HealthCheckOptions
 {
     Predicate = _ => false,
-    ResponseWriter = async (httpContext, report) =>
+    ResponseWriter = async (httpContext, _) =>
     {
         httpContext.Response.ContentType = "application/json";
         await httpContext.Response.WriteAsync(JsonSerializer.Serialize(new { status = "Live" }));
