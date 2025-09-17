@@ -20,6 +20,19 @@ Kullanýlan Teknolojiler ve Servisler:
 - API Dokümantasyonu: Swagger (Swashbuckle)
 - Diðer: Generic Repository pattern, Scrutor ile servis tarama, Docker & Docker Compose ile konteynerizasyon
 
+Test Coverage (Rozet):
+- Codecov (örnek):
+  https://img.shields.io/codecov/c/github/OWNER/REPO?style=flat  (OWNER/REPO kýsmýný deðiþtirin)
+- Coveralls (örnek):
+  https://img.shields.io/coveralls/github/OWNER/REPO?style=flat  (OWNER/REPO kýsmýný deðiþtirin)
+
+Kurulum (kýsa):
+- GitHub üzerinde repo varsa, GitHub Actions ile dotnet test --collect:"XPlat Code Coverage" çalýþtýrýp elde edilen coverage dosyasýný Codecov veya Coveralls'a gönderin.
+- Örnek adýmlar:
+  1) .github/workflows/coverage.yml oluþturun ve dotnet test + coverlet adýmlarýný ekleyin.
+  2) Codecov/Coveralls token'ýnýzý GitHub Secrets'a ekleyin.
+  3) README'deki badge URL'lerinde OWNER/REPO veya proje token bilgilerini güncelleyin.
+
 Proje Çalýþtýrma (Docker ile):
 - Docker ve Docker Compose yüklü olmalýdýr.
 - Aþaðýdaki komut ile API ve veritabaný konteynerlerini baþlatýn:
@@ -30,7 +43,7 @@ Unit Testler:
 - Projede "TeknikServis.Test" adýnda bir test projesi bulunmaktadýr.
 - Testleri çalýþtýrmak için kök dizinden þu komutu kullanýn:
   dotnet test
-- Test altyapýsý için xUnit kullanýlmýþtýr (örnek test sýnýfý: TeknikServis.Test/UnitTest1.cs).
+- Test altyapýsý için xUnit kullanýlmýþtýr (örnek test sýnýfý: TeknikServis.Test/LoginCommandHandlerTest.cs).
 
 Proje Deðerlendirmesi (Senior Ýmajý):
 - Proje mimarisi katmanlý, SOLID ilkelerine uygun ve kurumsal uygulamalar için gerekli altyapý bileþenlerini içerir.
