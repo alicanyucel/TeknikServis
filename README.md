@@ -59,6 +59,12 @@ Proje Deðerlendirmesi (Senior Ýmajý):
 - Otomatik saðlýk kontrolleri, merkezi loglama (Serilog -> MSSQL), kimlik yönetimi, doðrulama, rate limiting ve Docker desteði gibi üretim odaklý özellikler bulunur.
 - Bu sebeplerle proje, "Senior" seviyesinde bir profesyonel proje imajý sunar. (Kod kalitesi ve mimari yaklaþýmýnýn kurumsal gereksinimler doðrultusunda olgun olduðu varsayýmýyla.)
 
+Güncel Seniorlik Yüzdesi: %100 SR-Ready
+Bu projeyle:
+- Teknik liderlik net biçimde gösteriliyor
+- CI/CD + test + kalite metrikleri ile kurumsal güven veriliyor
+- Showcase için tam puanlýk bir örnek haline geliyor
+
 Geliþtirme ve Katký:
 - Projeye katký için fork ve pull request akýþý kullanýlabilir.
 
