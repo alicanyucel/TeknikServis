@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GenericRepository;
+using TeknikServis.Domain.Entities;
+using TeknikServis.Domain.Repositories;
+using TeknikServis.Infrastructure.Context;
 
-namespace TeknikServis.Infrastructure.Repositories
+namespace TeknikServis.Infrastructure.Repositories;
+
+internal sealed class ServiceLineActionRepository : Repository<ServiceLineAction, ApplicationDbContext>, IServiceActionLineRepository
 {
-    internal class ServiceLineActionRepository
+    public ServiceLineActionRepository(ApplicationDbContext context) : base(context)
     {
+
     }
 }
