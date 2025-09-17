@@ -25,13 +25,4 @@ Proje Çalýþtýrma (Docker ile):
   docker-compose up -d --build
 - API, varsayýlan yapýlandýrmada host üzerinde http://localhost:5000 adresinde dinler.
 
-Proje Deðerlendirmesi (Senior Ýmajý):
-- Proje mimarisi katmanlý, SOLID ilkelerine uygun ve kurumsal uygulamalar için gerekli altyapý bileþenlerini içerir.
-- Otomatik saðlýk kontrolleri, merkezi loglama (Serilog -> MSSQL), kimlik yönetimi, doðrulama, rate limiting ve Docker desteði gibi üretim odaklý özellikler bulunur.
-- Bu sebeplerle proje, "Senior" seviyesinde bir profesyonel proje imajý sunar. (Kod kalitesi ve mimari yaklaþýmýnýn kurumsal gereksinimler doðrultusunda olgun olduðu varsayýmýyla.)
-
-Geliþtirme ve Katký:
-- Projeye katký için fork ve pull request akýþý kullanýlabilir.
-
-Ýletiþim:
-- Lead developer: Ali CAN YUCEL
+Unit Test
