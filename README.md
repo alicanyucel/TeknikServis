@@ -20,6 +20,15 @@ Kullanýlan Teknolojiler ve Servisler:
 - API Dokümantasyonu: Swagger (Swashbuckle)
 - Diðer: Generic Repository pattern, Scrutor ile servis tarama, Docker & Docker Compose ile konteynerizasyon
 
+Kod Kalite Metrikleri (SonarQube / SonarCloud):
+- Proje için SonarCloud ya da self-hosted SonarQube entegrasyonu için örnek workflow eklendi (.github/workflows/sonar.yml).
+- Kullaným (SonarCloud):
+  1) SonarCloud veya SonarQube proje oluþturun.
+  2) GitHub Secrets içine aþaðýdaki deðerleri ekleyin: SONAR_ORG, SONAR_TOKEN, SONAR_PROJECT_KEY (self-hosted SonarQube kullanýyorsanýz ilgili endpoint ve token ayarlarýný yapýn).
+  3) main/master branch'e push veya pull request açýldýðýnda analiz tetiklenecektir.
+- Badge ekleme örneði (SonarCloud):
+  https://sonarcloud.io/api/project_badges/measure?project=YOUR_PROJECT_KEY&metric=alert_status
+
 Test Coverage (Rozet):
 - Codecov (örnek):
   https://img.shields.io/codecov/c/github/OWNER/REPO?style=flat  (OWNER/REPO kýsmýný deðiþtirin)
