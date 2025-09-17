@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using System.Linq.Expressions;
 using TeknikServis.Application.Features.Auth.Login;
 using TeknikServis.Application.Services;
 using TeknikServis.Domain.Entities;
-using System.Linq.Expressions;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace TeknikServis.Test;
 
@@ -144,7 +142,7 @@ public class LoginCommandHandlerTests
         {
             return new TestAsyncEnumerator<T>(this.AsEnumerable().GetEnumerator());
         }
-        IQueryProvider IQueryable.Provider => new TestAsyncQueryProvider<T>(this);
+        IQueryProvider IQueryable.Provider => (IQueryProvider)new TestAsyncQueryProvider<T>(this);
     }
 
     internal class TestAsyncEnumerator<T> : IAsyncEnumerator<T>
