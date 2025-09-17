@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using TeknikServis.Domain.Entities;
+using TeknikServis.Application.Dtos;
 using TS.Result;
 
 namespace TeknikServis.Application.Features.Customers.CustomerGetById;
 
-public sealed record GetCustomerByIdQuery(Guid Id) : IRequest<Result<Customer>>;
+public sealed record GetCustomerByIdQuery(Guid Id) : IRequest<Result<CustomerDto>>;

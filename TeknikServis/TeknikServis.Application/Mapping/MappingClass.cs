@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TeknikServis.Application.Dtos;
 using TeknikServis.Application.Features.Customers.CreateCustomers;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Enums;
@@ -16,5 +17,7 @@ public sealed class MappingClass : Profile
             .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => "System"))
             .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => "System"))
             .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => false));
+
+        CreateMap<Customer, CustomerDto>();
     }
 }

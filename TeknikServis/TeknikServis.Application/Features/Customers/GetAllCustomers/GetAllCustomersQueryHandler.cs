@@ -1,24 +1,30 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TeknikServis.Domain.Entities;
+using TeknikServis.Application.Dtos;
 using TeknikServis.Domain.Repositories;
 using TS.Result;
 
 namespace TeknikServis.Application.Features.Customers.GetAllCustomers;
 
-public sealed class GetAllCustomersQueryHandler : IRequestHandler<GetAllCustomersQuery, Result<List<Customer>>>
+internal sealed class GetAllCustomersQueryHandler : IRequestHandler<GetAllCustomersQuery, Result<List<CustomerDto>>>
 {
     private readonly ICustomerRepository _customerRepository;
+    private readonly IMapper _mapper;
 
-    public GetAllCustomersQueryHandler(ICustomerRepository customerRepository)
+    public GetAllCustomersQueryHandler(ICustomerRepository customerRepository, IMapper mapper)
     {
         _customerRepository = customerRepository;
+        _mapper = mapper;
     }
 
-    public async Task<Result<List<Customer>>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<CustomerDto>>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
     {
         var customers = await _customerRepository.GetAll()
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
-        return Result<List<Customer>>.Succeed(customers);
+
+        var dtos = _mapper.Map<List<CustomerDto>>(customers);
+        return Result<List<CustomerDto>>.Succeed(dtos);
     }
 }
