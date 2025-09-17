@@ -1,0 +1,6 @@
+@TeknikServis.WebAPI_HostAddress = http://localhost:5193
+
+GET {{TeknikServis.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
