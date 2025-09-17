@@ -43,7 +43,8 @@ public sealed class CreateCustomerCommandValidator : AbstractValidator<CreateCus
         RuleFor(x => x.Neighborhood)
             .NotEmpty().WithMessage("Mahalle alanı boş bırakılamaz.");
 
-        RuleFor(x => x.CustomerType)
-            .IsInEnum().WithMessage("Geçersiz müşteri tipi.");
+        // customerType comes as numeric value in request (CustomerValue). Validate allowed values (1 = Bireysel, 2 = Kurumsal)
+        RuleFor(x => x.CustomerValue)
+            .InclusiveBetween(1, 2).WithMessage("Geçersiz müşteri tipi. (1 = Bireysel, 2 = Kurumsal)");
     }
 }

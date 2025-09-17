@@ -8,9 +8,10 @@ public sealed class MappingClass : Profile
 {
     public MappingClass()
     {
+
         CreateMap<CreateCustomerCommand, Customer>().ForMember(member => member.CustomerType, options =>
         {
-            options.MapFrom(map => CustomerType.FromValue(map.CustomerType));
-        });     
+            options.MapFrom(map => CustomerType.FromValue(map.CustomerValue));
+        });
     }
 }

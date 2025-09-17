@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using TeknikServis.Domain.Enums;
 using TS.Result;
 
 namespace TeknikServis.Application.Features.Customers.CreateCustomers;
@@ -15,5 +14,5 @@ string Country,
 string ZipCode,
 string District,
 string Neighborhood,
-int CustomerType
+int CustomerValue
 ) : IRequest<Result<string>>;
