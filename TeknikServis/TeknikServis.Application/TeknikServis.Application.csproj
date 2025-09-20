@@ -22,4 +22,8 @@
     <ProjectReference Include="..\TeknikServis.Domain\TeknikServis.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Product\" />
+  </ItemGroup>
+
 </Project>
