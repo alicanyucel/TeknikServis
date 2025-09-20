@@ -32,9 +32,9 @@ public class CustomersController : ApiController
         return NoContent();
     }
     [HttpPost]
-    public async Task<IActionResult> CustomerGetById(GetCustomerByIdQuery request)
+    public async Task<IActionResult> CustomerGetById(GetCustomerByIdQuery request,CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(request);
+        var result = await _mediator.Send(request,cancellationToken);
         return Ok(result);
 
 
