@@ -16,5 +16,12 @@ string Country,
 string ZipCode,
 string District,
 string Neighborhood,
-CustomerType CustomerType
+CustomerType CustomerType,
+TimeOnly UpdatedTime,
+TimeOnly CreatedTime,
+string? UpdatedBy,
+string CreatedBy,
+DateTime CreatedAt,
+DateTime? UpdatedAt,
+bool IsDeleted
 ) : IRequest<Result<string>>;

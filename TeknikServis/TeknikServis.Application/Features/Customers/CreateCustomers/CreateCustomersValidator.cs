@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using TeknikServis.Domain.Enums;
 
 namespace TeknikServis.Application.Features.Customers.CreateCustomers;
 

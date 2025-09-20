@@ -37,11 +37,14 @@ public sealed class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustome
         customer.District = request.District;
         customer.Neighborhood = request.Neighborhood;
         customer.CustomerType = request.CustomerType;
-
+        customer.UpdatedTime = request.UpdatedTime;
+        customer.CreatedTime = request.CreatedTime;
+        customer.CreatedBy = request.CreatedBy;
+        customer.UpdatedBy = request.UpdatedBy ?? "Unknown";
+        customer.UpdatedAt = request.UpdatedAt;
+        customer.IsDeleted = request.IsDeleted;
         _customerRepository.Update(customer);
-
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-
         return "Müşteri güncelllendi";
     }
 }
