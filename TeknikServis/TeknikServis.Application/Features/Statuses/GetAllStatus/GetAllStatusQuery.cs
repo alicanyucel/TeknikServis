@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TeknikServis.Application.Dtos;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.Statuses.GetAllStatus
-{
-    internal class GetAllStatusQuery
-    {
-    }
-}
+namespace TeknikServis.Application.Features.Statuses.GetAllStatus;
+
+public sealed record GetAllStatusQuery() : IRequest<Result<List<StatusDto>>>;
