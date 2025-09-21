@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
-namespace TeknikServis.Application.Features.VideoLinks.DeleteVideoLinks
-{
-    internal class DeleteVideoLinksCommand
-    {
-    }
-}
+namespace TeknikServis.Application.Features.VideoLinks.DeleteVideoLinks;
+
+public sealed record DeleteVideoLinkCommand(Guid Id) : IRequest;

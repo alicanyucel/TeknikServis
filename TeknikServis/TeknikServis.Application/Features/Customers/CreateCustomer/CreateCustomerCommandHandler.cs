@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GenericRepository;
 using MediatR;
+using TeknikServis.Application.Features.Customers.CreateCustomer;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Repositories;
 using TS.Result;
@@ -15,6 +16,5 @@ internal sealed class CreateCustomerComamndHandler(ICustomerRepository customerR
         await customerRepository.AddAsync(customer, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return "Müşteri kaydı yapıldı";
-;
     }
 }

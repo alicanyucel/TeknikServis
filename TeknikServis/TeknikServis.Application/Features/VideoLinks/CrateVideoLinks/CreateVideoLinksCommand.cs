@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.VideoLinks.CrateVideoLinks
-{
-    internal class CreateVideoLinksCommand
-    {
-    }
-}
+namespace TeknikServis.Application.Features.VideoLinks.CrateVideoLinks;
+
+public sealed record CreateVideoLinkCommand(
+    string Url,
+    string Description,
+    Guid ServiceActionId
+) : IRequest<Result<string>>;

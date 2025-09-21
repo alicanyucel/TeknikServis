@@ -9,21 +9,46 @@ namespace TeknikServis.Infrastructure.Context;
 
 public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>, IUnitOfWork
 {
-    public ApplicationDbContext(DbContextOptions options) : base(options)
-    {
-    }
+    public ApplicationDbContext(DbContextOptions options) : base(options) { }
+
+    public DbSet<Province> Provinces => Set<Province>();
+    public DbSet<District> Districts => Set<District>();
+    public DbSet<Neighborhood> Neighborhoods => Set<Neighborhood>();
+    public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<Person> Persons => Set<Person>();
     public DbSet<Status> Statuses => Set<Status>();
+    public DbSet<ServiceAction> ServiceActions => Set<ServiceAction>();
     public DbSet<ServiceLineAction> ServiceLineActions => Set<ServiceLineAction>();
     public DbSet<DocumentLink> DocumentLinks => Set<DocumentLink>();
     public DbSet<VideoLink> VideoLinks => Set<VideoLink>();
-    public DbSet<Customer> Customers => Set<Customer>();
-    public DbSet<Product> Products => Set<Product>();
-    public DbSet<ServiceAction> ServiceActions => Set<ServiceAction>();
-    public DbSet<Person> Persons => Set<Person>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        // Province → District
+        builder.Entity<Province>()
+            .HasMany(p => p.Districts)
+            .WithOne(d => d.Province)
+            .HasForeignKey(d => d.ProvinceId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // District → Neighborhood
+        builder.Entity<District>()
+            .HasMany(d => d.Neighborhoods)
+            .WithOne(n => n.District)
+            .HasForeignKey(n => n.DistrictId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Neighborhood → Customer
+        builder.Entity<Neighborhood>()
+            .HasMany(n => n.Customers)
+            .WithOne(c => c.Neighborhood)
+            .HasForeignKey(c => c.NeighborhoodId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // SmartEnum conversions
         builder.Entity<Customer>()
             .Property(c => c.CustomerType)
             .HasConversion(
@@ -44,12 +69,15 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
                 v => v.Name,
                 v => ExpertiseArea.FromName(v, false)
             );
+
+        // ServiceLineAction relationships
         builder.Entity<ServiceLineAction>(b =>
         {
             b.HasOne(sla => sla.Product)
                 .WithMany()
                 .HasForeignKey(sla => sla.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             b.HasOne(sla => sla.ServiceAction)
                 .WithMany(sa => sa.ServiceLineActions)
                 .HasForeignKey(sla => sla.ServiceActionId)
@@ -70,6 +98,8 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
                 .HasForeignKey(sla => sla.StatusId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
+        // ServiceAction relationships
         builder.Entity<ServiceAction>(b =>
         {
             b.HasOne(sa => sa.Person)
@@ -81,6 +111,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
                 .WithMany()
                 .HasForeignKey(sa => sa.StatusId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             b.HasMany(sa => sa.DocumentLinks)
                 .WithOne(dl => dl.ServiceAction)
                 .HasForeignKey(dl => dl.ServiceActionId)
@@ -96,6 +127,8 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
                 .HasForeignKey(sa => sa.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
+        // Product → Customer
         builder.Entity<Product>(b =>
         {
             b.HasOne(p => p.Customer)
@@ -103,8 +136,11 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
                 .HasForeignKey(p => p.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
+        // Apply configurations
         builder.ApplyConfigurationsFromAssembly(typeof(DependencyInjection).Assembly);
 
+        // Ignore Identity tables not used
         builder.Ignore<IdentityUserLogin<Guid>>();
         builder.Ignore<IdentityRoleClaim<Guid>>();
         builder.Ignore<IdentityUserToken<Guid>>();

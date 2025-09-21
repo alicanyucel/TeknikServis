@@ -12,15 +12,15 @@ using TeknikServis.Infrastructure.Context;
 namespace TeknikServis.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250916122015_mg434343439999994488we")]
-    partial class mg434343439999994488we
+    [Migration("20250921101834_mg344343434343434s3434434343")]
+    partial class mg344343434343434s3434434343
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -139,11 +139,7 @@ namespace TeknikServis.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
+                    b.Property<string>("AddressLine")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -165,10 +161,6 @@ namespace TeknikServis.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("District")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -180,15 +172,10 @@ namespace TeknikServis.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Neighborhood")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("NeighborhoodId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Province")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -212,7 +199,52 @@ namespace TeknikServis.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NeighborhoodId");
+
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.District", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateadAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("CreatedTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProvinceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("UpdatedTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProvinceId");
+
+                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.DocumentLink", b =>
@@ -260,6 +292,49 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.HasIndex("ServiceActionId");
 
                     b.ToTable("DocumentLinks");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Neighborhood", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateadAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("CreatedTime")
+                        .HasColumnType("time");
+
+                    b.Property<Guid>("DistrictId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("UpdatedTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DistrictId");
+
+                    b.ToTable("Neighborhoods");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.Person", b =>
@@ -365,6 +440,44 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Province", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateadAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("CreatedTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("UpdatedTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Provinces");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.ServiceAction", b =>
@@ -574,6 +687,28 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.ToTable("VideoLinks");
                 });
 
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Customer", b =>
+                {
+                    b.HasOne("TeknikServis.Domain.Entities.Neighborhood", "Neighborhood")
+                        .WithMany("Customers")
+                        .HasForeignKey("NeighborhoodId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Neighborhood");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.District", b =>
+                {
+                    b.HasOne("TeknikServis.Domain.Entities.Province", "Province")
+                        .WithMany("Districts")
+                        .HasForeignKey("ProvinceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Province");
+                });
+
             modelBuilder.Entity("TeknikServis.Domain.Entities.DocumentLink", b =>
                 {
                     b.HasOne("TeknikServis.Domain.Entities.ServiceAction", "ServiceAction")
@@ -585,10 +720,21 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.Navigation("ServiceAction");
                 });
 
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Neighborhood", b =>
+                {
+                    b.HasOne("TeknikServis.Domain.Entities.District", "District")
+                        .WithMany("Neighborhoods")
+                        .HasForeignKey("DistrictId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("District");
+                });
+
             modelBuilder.Entity("TeknikServis.Domain.Entities.Product", b =>
                 {
                     b.HasOne("TeknikServis.Domain.Entities.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -677,9 +823,29 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.Navigation("ServiceAction");
                 });
 
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.District", b =>
+                {
+                    b.Navigation("Neighborhoods");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Neighborhood", b =>
+                {
+                    b.Navigation("Customers");
+                });
+
             modelBuilder.Entity("TeknikServis.Domain.Entities.Person", b =>
                 {
                     b.Navigation("Actions");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Province", b =>
+                {
+                    b.Navigation("Districts");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.ServiceAction", b =>

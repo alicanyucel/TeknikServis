@@ -2,6 +2,7 @@ using DefaultCorsPolicyNugetPackage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
@@ -12,6 +13,7 @@ using System.Text.Json;
 using System.Threading.RateLimiting;
 using TeknikServis.Application;
 using TeknikServis.Infrastructure;
+using TeknikServis.Infrastructure.Context;
 using TeknikServis.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -93,6 +95,8 @@ else
 }
 
 var app = builder.Build();
+
+// Apply pending EF Core migrations automatically at startup
 
 if (app.Environment.IsDevelopment())
 {
