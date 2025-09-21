@@ -23,13 +23,6 @@ public sealed class CustomerMappingProfile : Profile
        .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
        .ForMember(dest => dest.ServiceActionId, opt => opt.MapFrom(src => src.ServiceActionId));
 
-    //    CreateMap<UpdateDocumentLinkCommand, DocumentLink>()
-    //.ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Url))
-    //.ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-    //.ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(_ => "System"))
-    //.ForMember(dest => dest.UpdatedTime, opt => opt.MapFrom(_ => TimeOnly.FromDateTime(DateTime.UtcNow)))
-    //.ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => (DateTime?)DateTime.UtcNow))
-    //.ForAllOtherMembers(opt => opt.Ignore()); // ID, CreatedBy, CreatedTime vs. korunur
 
 
     }
