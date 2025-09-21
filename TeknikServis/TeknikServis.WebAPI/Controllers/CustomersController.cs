@@ -41,7 +41,7 @@ public class CustomersController : ApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetAll(GetAllCustomersQuery request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll(GetAllCustomerQuery request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
         return Ok(response);
