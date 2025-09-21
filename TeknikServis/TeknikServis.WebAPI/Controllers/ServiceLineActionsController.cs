@@ -3,11 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using TeknikServis.WebAPI.Abstractions;
 
 namespace TeknikServis.WebAPI.Controllers;
-
 [AllowAnonymous]
-public class ServicesController : ApiController
+public class ServiceLineActionsController : ApiController
 {
-    public ServicesController(IMediator mediator) : base(mediator)
+    public ServiceLineActionsController(IMediator mediator) : base(mediator)
     {
     }
 }

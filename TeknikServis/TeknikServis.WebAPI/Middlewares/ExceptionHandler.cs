@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using TS.Result;
 
 namespace TeknikServis.WebAPI.Middlewares
@@ -9,26 +10,36 @@ namespace TeknikServis.WebAPI.Middlewares
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            Result<string> errorResult;
-
             httpContext.Response.ContentType = "application/json";
-            httpContext.Response.StatusCode = 500;
 
-            if (exception.GetType() == typeof(ValidationException))
+            if (exception is ValidationException vEx)
             {
-                httpContext.Response.StatusCode = 403;
-
-                errorResult = Result<string>.Failure(403, ((ValidationException)exception).Errors.Select(s => s.PropertyName).ToList());
-
-                await httpContext.Response.WriteAsync(JsonSerializer.Serialize(errorResult));
-
+                httpContext.Response.StatusCode = 400;
+                var msgs = vEx.Errors.Select(e => e.ErrorMessage).ToList();
+                var errorResult = Result<string>.Failure(400, msgs);
+                await httpContext.Response.WriteAsync(JsonSerializer.Serialize(errorResult), cancellationToken);
                 return true;
             }
 
-            errorResult = Result<string>.Failure(exception.Message);
+            httpContext.Response.StatusCode = 500;
 
-            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(errorResult));
+            // Include inner exception messages to help troubleshooting
+            var list = new List<string> { exception.Message };
+            var inner = exception.InnerException;
+            while (inner != null)
+            {
+                list.Add(inner.Message);
+                inner = inner.InnerException;
+            }
 
+            // If it's a DbUpdateException, hint it's a data issue
+            if (exception is DbUpdateException && !list.Any(m => m.Contains("DbUpdateException", StringComparison.OrdinalIgnoreCase)))
+            {
+                list.Insert(0, "Database update error (check FK constraints, NOT NULL, conversions).");
+            }
+
+            var result = Result<string>.Failure(500, list);
+            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(result), cancellationToken);
             return true;
         }
     }
