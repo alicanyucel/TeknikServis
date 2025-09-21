@@ -10,5 +10,12 @@ public sealed record CreateCustomerCommand(
     string PhoneNumber,
     string Email,
     Address Address,
-    int CustomerType
+    int CustomerType,
+    TimeOnly UpdatedTime,
+    string UpdatedBy,
+    string CreatedBy,
+    TimeOnly CratedTime,
+    DateTime CreateadAt,
+    DateTime? UpdatedAt,
+    bool IsDeleted
 ) : IRequest<Result<string>>;

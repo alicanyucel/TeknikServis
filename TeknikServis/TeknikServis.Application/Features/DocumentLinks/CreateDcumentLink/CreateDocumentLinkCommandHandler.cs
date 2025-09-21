@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using GenericRepository;
+using MediatR;
+using TeknikServis.Domain.Entities;
+using TeknikServis.Domain.Repositories;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.DocumentLinks.CreateDcumentLink
+namespace TeknikServis.Application.Features.DocumentLinks.CreateDcumentLink;
+
+
+internal sealed class CreateDocumentLinkComamndHandler(IDocumentLinkRepository documentlinkRepository, IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateDocumentLinkCommand, Result<string>>
 {
-    internal class CreateDocumentLinkCommandHandler
+    public async Task<Result<string>> Handle(CreateDocumentLinkCommand request, CancellationToken cancellationToken)
     {
+        DocumentLink documentLink = mapper.Map<DocumentLink>(request);
+        await documentlinkRepository.AddAsync(documentLink, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        return "Dökümman kaydı yapıldı";
     }
 }

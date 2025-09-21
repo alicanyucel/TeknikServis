@@ -13,4 +13,5 @@ public sealed class Customer : Entity
     public Address Address { get; set; } = default!;
     public CustomerType CustomerType { get; set; } = CustomerType.Invidual;
     public ICollection<Product> Products { get; set; } = new List<Product>();
+
 }

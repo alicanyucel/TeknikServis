@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.DocumentLinks.CreateDcumentLink
-{
-    internal class CreateDocumentLinkCommmand
-    {
-    }
-}
+namespace TeknikServis.Application.Features.DocumentLinks.CreateDcumentLink;
+
+public sealed record CreateDocumentLinkCommand(
+string Url,
+string Description,
+Guid ServiceActionId
+) : IRequest<Result<string>>;
