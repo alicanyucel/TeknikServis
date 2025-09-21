@@ -2,41 +2,16 @@ using DefaultCorsPolicyNugetPackage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
-using Serilog;
-using Serilog.Sinks.MSSqlServer;
 using System.Data;
 using System.Text.Json;
 using System.Threading.RateLimiting;
 using TeknikServis.Application;
 using TeknikServis.Infrastructure;
-using TeknikServis.Infrastructure.Context;
 using TeknikServis.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("SqlServer") ??
-    "Data Source=DESKTOP-L6NJT48\\SQLEXPRESS;Initial Catalog=ServisDatabaeseSon;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
-
-var columnOptions = new ColumnOptions();
-columnOptions.Store.Remove(StandardColumn.Properties);
-columnOptions.Store.Add(StandardColumn.LogEvent);Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .Enrich.FromLogContext()
-    .WriteTo.Console(outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
-    .WriteTo.MSSqlServer(
-        connectionString: connectionString,
-        sinkOptions: new MSSqlServerSinkOptions
-        {
-            TableName = "Logs",
-            AutoCreateSqlTable = true
-        },
-        columnOptions: columnOptions)
-    .CreateLogger();
-
-builder.Host.UseSerilog();
 builder.Services.AddDefaultCors();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -82,19 +57,7 @@ builder.Services.AddSwaggerGen(setup =>
     });
 });
 
-var healthChecksBuilder = builder.Services.AddHealthChecks();
-if (!string.IsNullOrWhiteSpace(connectionString))
-{
-    healthChecksBuilder.AddSqlServer(connectionString, tags: new[] { "db" });
-}
-else
-{
-    healthChecksBuilder.AddCheck("self", () => HealthCheckResult.Healthy("db configure edilmedi."));
-}
-
 var app = builder.Build();
-
-// Apply pending EF Core migrations automatically at startup
 
 if (app.Environment.IsDevelopment())
 {
@@ -134,35 +97,6 @@ app.Use(async (context, next) =>
 });
 
 app.MapControllers();
-app.MapHealthChecks("/health/ready", new HealthCheckOptions
-{
-    Predicate = check => check.Tags != null && check.Tags.Contains("db"),
-    ResponseWriter = async (httpContext, report) =>
-    {
-        httpContext.Response.ContentType = "application/json";
-        var result = new
-        {
-            status = report.Status.ToString(),
-            checks = report.Entries.Select(e => new
-            {
-                name = e.Key,
-                status = e.Value.Status.ToString(),
-                description = e.Value.Description
-            })
-        };
-        await httpContext.Response.WriteAsync(JsonSerializer.Serialize(result));
-    }
-});
-
-app.MapHealthChecks("/health/live", new HealthCheckOptions
-{
-    Predicate = _ => false,
-    ResponseWriter = async (httpContext, _) =>
-    {
-        httpContext.Response.ContentType = "application/json";
-        await httpContext.Response.WriteAsync(JsonSerializer.Serialize(new { status = "Live" }));
-    }
-});
 
 ExtensionsMiddleware.CreateFirstUser(app);
 app.Run();

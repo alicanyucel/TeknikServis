@@ -1,3 +1,6 @@
-﻿namespace TeknikServis.Domain.ValueObjects;
+﻿using Microsoft.EntityFrameworkCore;
 
-public sealed record Address(string AddressLine,string City,string Neighborhood,string District,string ZipCode);
+namespace TeknikServis.Domain.ValueObjects;
+
+[Owned]
+public sealed record Address(string AddressLine, string City, string Neighborhood, string District, string ZipCode, string Country);

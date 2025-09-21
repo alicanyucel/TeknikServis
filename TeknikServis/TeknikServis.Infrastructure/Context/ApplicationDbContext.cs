@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Enums;
+using TeknikServis.Domain.ValueObjects;
 
 namespace TeknikServis.Infrastructure.Context;
 
@@ -23,6 +24,17 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        // Address as owned type on Customer
+        builder.Entity<Customer>().OwnsOne(c => c.Address, a =>
+        {
+            a.Property(p => p.AddressLine).HasColumnName("AddressLine");
+            a.Property(p => p.City).HasColumnName("City");
+            a.Property(p => p.Neighborhood).HasColumnName("Neighborhood");
+            a.Property(p => p.District).HasColumnName("District");
+            a.Property(p => p.ZipCode).HasColumnName("ZipCode");
+            a.Property(p => p.Country).HasColumnName("Country");
+        });
 
         // SmartEnum conversions
         builder.Entity<Customer>()

@@ -21,21 +21,13 @@ public sealed class CreateCustomerCommandValidator : AbstractValidator<CreateCus
             .NotEmpty().WithMessage("Email boş olamaz.")
             .EmailAddress().WithMessage("Geçerli bir email adresi giriniz.");
 
-        RuleFor(x => x.AddressLine)
-            .NotEmpty().WithMessage("Adres bilgisi boş olamaz.")
-            .MaximumLength(250).WithMessage("Adres en fazla 250 karakter olabilir.");
+        // Address checks (basic)
+        RuleFor(x => x.Address)
+            .NotNull().WithMessage("Adres bilgisi zorunludur.");
 
-        RuleFor(x => x.ZipCode)
-            .NotEmpty().WithMessage("Posta kodu boş olamaz.")
-            .MaximumLength(20).WithMessage("Posta kodu en fazla 20 karakter olabilir.");
-
-        RuleFor(x => x.Country)
-            .NotEmpty().WithMessage("Ülke bilgisi boş olamaz.")
-            .MaximumLength(100).WithMessage("Ülke en fazla 100 karakter olabilir.");
-
-        RuleFor(x => x.NeighborhoodId)
-            .NotEmpty().WithMessage("Mahalle seçimi zorunludur.");
-
-        
+        // CustomerType: 1 = Bireysel, 2 = Kurumsal
+        RuleFor(x => x.CustomerType)
+            .Must(v => v == 1 || v == 2)
+            .WithMessage("Geçersiz müşteri tipi. (1 = Bireysel, 2 = Kurumsal)");
     }
 }
