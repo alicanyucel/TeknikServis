@@ -5,6 +5,7 @@ using TeknikServis.Application.Features.Customers.CreateCustomer;
 using TeknikServis.Application.Features.Customers.CustomerGetById;
 using TeknikServis.Application.Features.Customers.DeleteCustomers;
 using TeknikServis.Application.Features.Customers.GetAllCustomers;
+using TeknikServis.Application.Features.Customers.UpdateCustomer;
 using TeknikServis.WebAPI.Abstractions;
 
 namespace TeknikServis.WebAPI.Controllers;
@@ -42,6 +43,12 @@ public class CustomersController : ApiController
 
     [HttpPost]
     public async Task<IActionResult> GetAll(GetAllCustomerQuery request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(request, cancellationToken);
+        return Ok(response);
+    }
+    [HttpPost]
+    public async Task<IActionResult> UpdateCustomer(UpdateCustomerCommand request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
         return Ok(response);
