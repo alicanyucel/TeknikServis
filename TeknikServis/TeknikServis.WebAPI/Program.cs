@@ -22,9 +22,7 @@ var connectionString = builder.Configuration.GetConnectionString("SqlServer") ??
 
 var columnOptions = new ColumnOptions();
 columnOptions.Store.Remove(StandardColumn.Properties);
-columnOptions.Store.Add(StandardColumn.LogEvent);
-
-Log.Logger = new LoggerConfiguration()
+columnOptions.Store.Add(StandardColumn.LogEvent);Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .Enrich.FromLogContext()
     .WriteTo.Console(outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}")

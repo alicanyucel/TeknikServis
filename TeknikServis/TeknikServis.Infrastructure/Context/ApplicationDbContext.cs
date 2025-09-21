@@ -11,9 +11,6 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
 {
     public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
-    public DbSet<Province> Provinces => Set<Province>();
-    public DbSet<District> Districts => Set<District>();
-    public DbSet<Neighborhood> Neighborhoods => Set<Neighborhood>();
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Person> Persons => Set<Person>();
@@ -26,27 +23,6 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
-        // Province → District
-        builder.Entity<Province>()
-            .HasMany(p => p.Districts)
-            .WithOne(d => d.Province)
-            .HasForeignKey(d => d.ProvinceId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // District → Neighborhood
-        builder.Entity<District>()
-            .HasMany(d => d.Neighborhoods)
-            .WithOne(n => n.District)
-            .HasForeignKey(n => n.DistrictId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // Neighborhood → Customer
-        builder.Entity<Neighborhood>()
-            .HasMany(n => n.Customers)
-            .WithOne(c => c.Neighborhood)
-            .HasForeignKey(c => c.NeighborhoodId)
-            .OnDelete(DeleteBehavior.Restrict);
 
         // SmartEnum conversions
         builder.Entity<Customer>()
