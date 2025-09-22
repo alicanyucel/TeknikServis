@@ -4,6 +4,7 @@ using TeknikServis.Application.Features.Customers.UpdateCustomer;
 using TeknikServis.Application.Features.DocumentLinks.CreateDcumentLink;
 using TeknikServis.Application.Features.ServiceActions.CreateServiceActions;
 using TeknikServis.Application.Features.Statuses.CreateSratus;
+using TeknikServis.Application.Features.Statuses.UpdateStatus;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Enums;
 
@@ -11,6 +12,7 @@ public sealed class CustomerMappingProfile : Profile
 {
     public CustomerMappingProfile()
     {
+        CreateMap<UpdateStatusCommand, Status>().ReverseMap();
         CreateMap<CreateStatusCommand, Status>().ReverseMap();  
         CreateMap<CreateServiceActionCommand, ServiceAction>().ReverseMap();
         CreateMap<CreateCustomerCommand, Customer>()

@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeknikServis.Application.Features.Statuses.CreateSratus;
+using TeknikServis.Application.Features.Statuses.DeleteStatus;
 using TeknikServis.Application.Features.Statuses.GetAllStatus;
 using TeknikServis.Application.Features.Statuses.GetByIdStatus;
+using TeknikServis.Application.Features.Statuses.UpdateStatus;
 using TeknikServis.WebAPI.Abstractions;
 
 namespace TeknikServis.WebAPI.Controllers;
@@ -16,6 +18,18 @@ public class StatusesController : ApiController
     }
     [HttpPost]
     public async Task<IActionResult> GetAllStatus(GetAllStatusQuery request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(request, cancellationToken);
+        return Ok(response);
+    }
+    [HttpPost]
+    public async Task<IActionResult> DeleteStatus(DeleteStatusCommand request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(request, cancellationToken);
+        return Ok(response);
+    }
+    [HttpPost]
+    public async Task<IActionResult> UpdateStatus(UpdateStatusCommand request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
         return Ok(response);

@@ -6,7 +6,7 @@ using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Repositories;
 using TS.Result;
 
-internal sealed class UpdateDoctorCommandHandler(ICustomerRepository customerRepository, IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateCustomerCommand, Result<string>>
+internal sealed class UpdateCustomerCommandHandler(ICustomerRepository customerRepository, IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateCustomerCommand, Result<string>>
 {
     public async Task<Result<string>> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
     {
