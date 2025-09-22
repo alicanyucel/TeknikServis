@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
-namespace TeknikServis.Application.Features.Persons.CreatePerson
+namespace TeknikServis.Application.Features.Persons.CreatePerson;
+
+public sealed class CreatePersonCommandValidator : AbstractValidator<CreatePersonCommand>
 {
-    internal class CreatePersonCommandValidator
+    public CreatePersonCommandValidator()
     {
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("Ad boş olamaz.")
+            .MaximumLength(100);
+
+        RuleFor(x => x.LastName)
+            .NotEmpty().WithMessage("Soyad boş olamaz.")
+            .MaximumLength(100);
+
+        RuleFor(x => x.ExpertiseArea)
+            .IsInEnum().WithMessage("Geçersiz uzmanlık alanı.");
     }
 }
