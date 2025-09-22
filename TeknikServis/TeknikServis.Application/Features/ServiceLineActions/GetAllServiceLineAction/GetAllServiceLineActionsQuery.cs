@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TeknikServis.Domain.Entities;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.ServiceLineActions.GetAllServiceLineAction
-{
-    internal class GetAllServiceLineActionsQuery
-    {
-    }
-}
+namespace TeknikServis.Application.Features.ServiceLineActions.GetAllServiceLineAction;
+
+public sealed record GetAllServiceLineActionQuery : IRequest<Result<List<ServiceLineAction>>>;
