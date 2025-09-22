@@ -2,6 +2,7 @@
 using TeknikServis.Application.Features.Customers.CreateCustomer;
 using TeknikServis.Application.Features.Customers.UpdateCustomer;
 using TeknikServis.Application.Features.DocumentLinks.CreateDcumentLink;
+using TeknikServis.Application.Features.DocumentLinks.UpdateDocumentLink;
 using TeknikServis.Application.Features.Persons.CreatePerson;
 using TeknikServis.Application.Features.Products.CreateProduct;
 using TeknikServis.Application.Features.ServiceActions.CreateServiceActions;
@@ -16,6 +17,7 @@ public sealed class CustomerMappingProfile : Profile
 {
     public CustomerMappingProfile()
     {
+        
         CreateMap<CreateServiceLineActionsCommand, ServiceLineAction>().ReverseMap();
         CreateMap<CreatePersonCommand, Person>().ReverseMap()
         .ForMember(dest => dest.ExpertiseArea, opt => opt.MapFrom(src =>ExpertiseArea.FromValue(src.ExpertiseArea)));
@@ -32,6 +34,7 @@ public sealed class CustomerMappingProfile : Profile
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
             .ForMember(dest => dest.CustomerType, opt => opt.MapFrom(src => CustomerType.FromValue(src.CustomerType)))
             .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+        CreateMap<UpdateDocumentLinkCommand, DocumentLink>().ReverseMap();
         CreateMap<CreateDocumentLinkCommand, DocumentLink>()
        .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Url))
        .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))

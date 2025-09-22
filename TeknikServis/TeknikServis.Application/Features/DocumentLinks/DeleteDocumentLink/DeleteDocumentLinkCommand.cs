@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.DocumentLinks.DeleteDocumentLink
-{
-    internal class DeleteDocumentLinkCommand
-    {
-    }
-}
+namespace TeknikServis.Application.Features.DocumentLinks.DeleteDocumentLink;
+
+public sealed record DeleteDocumentLinkCommand(Guid Id) : IRequest<Result<string>>;

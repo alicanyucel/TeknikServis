@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TeknikServis.Domain.Entities;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.DocumentLinks.GetAllDocumentLink
-{
-    internal class GetAllDocumentLinkQuery
-    {
-    }
-}
+namespace TeknikServis.Application.Features.DocumentLinks.GetAllDocumentLink;
+
+
+public sealed record GetAllDocumentLinkQuery : IRequest<Result<List<DocumentLink>>>;

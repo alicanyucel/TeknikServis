@@ -12,5 +12,4 @@ public sealed record CreateStatusCommand(
     DateTime CreateadAt,
     DateTime? UpdatedAt,
     bool IsDeleted
-
 ) : IRequest<Result<string>>;
