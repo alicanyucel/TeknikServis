@@ -5,7 +5,7 @@ using TeknikServis.Infrastructure.Context;
 
 namespace TeknikServis.Infrastructure.Repositories;
 
-internal sealed class ServiceLineActionRepository : Repository<ServiceLineAction, ApplicationDbContext>, IServiceActionLineRepository
+internal sealed class ServiceLineActionRepository : Repository<ServiceLineAction, ApplicationDbContext>, IServiceLineActionsRepository
 {
     public ServiceLineActionRepository(ApplicationDbContext context) : base(context)
     {

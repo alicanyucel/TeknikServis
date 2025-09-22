@@ -5,6 +5,7 @@ using TeknikServis.Application.Features.DocumentLinks.CreateDcumentLink;
 using TeknikServis.Application.Features.Persons.CreatePerson;
 using TeknikServis.Application.Features.Products.CreateProduct;
 using TeknikServis.Application.Features.ServiceActions.CreateServiceActions;
+using TeknikServis.Application.Features.ServiceLineActions.CreateServiceLineActions;
 using TeknikServis.Application.Features.Statuses.CreateSratus;
 using TeknikServis.Application.Features.Statuses.UpdateStatus;
 using TeknikServis.Application.Features.VideoLinks.CrateVideoLinks;
@@ -15,6 +16,7 @@ public sealed class CustomerMappingProfile : Profile
 {
     public CustomerMappingProfile()
     {
+        CreateMap<CreateServiceLineActionsCommand, ServiceLineAction>().ReverseMap();
         CreateMap<CreatePersonCommand, Person>().ReverseMap()
         .ForMember(dest => dest.ExpertiseArea, opt => opt.MapFrom(src =>ExpertiseArea.FromValue(src.ExpertiseArea)));
         CreateMap<CreateVideoLinkCommand, VideoLink>().ReverseMap();
@@ -26,18 +28,13 @@ public sealed class CustomerMappingProfile : Profile
         CreateMap<CreateCustomerCommand, Customer>()
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
             .ForMember(dest => dest.CustomerType, opt => opt.MapFrom(src => CustomerType.FromValue(src.CustomerType)));
-
         CreateMap<UpdateCustomerCommand, Customer>()
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
             .ForMember(dest => dest.CustomerType, opt => opt.MapFrom(src => CustomerType.FromValue(src.CustomerType)))
             .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
-
         CreateMap<CreateDocumentLinkCommand, DocumentLink>()
        .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Url))
        .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
        .ForMember(dest => dest.ServiceActionId, opt => opt.MapFrom(src => src.ServiceActionId));
-
-
-
     }
 }

@@ -3,6 +3,6 @@ using TeknikServis.Domain.Entities;
 
 namespace TeknikServis.Domain.Repositories;
 
-public interface IServiceActionLineRepository:IRepository<ServiceLineAction>
+public interface IServiceLineActionsRepository:IRepository<ServiceLineAction>
 {
 }
