@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.VideoLinks.UpdateVideoLinks
-{
-    internal class UpdateVideoLinksCommand
-    {
-    }
-}
+namespace TeknikServis.Application.Features.VideoLinks.UpdateVideoLinks;
+
+public sealed record UpdateVideoLinkCommand(
+    Guid Id,
+    string Url,
+    string Description,
+    Guid ServiceActionId,
+    TimeOnly UpdatedTime,
+    string UpdatedBy,
+    string CreatedBy,
+    TimeOnly CratedTime,
+    DateTime CreateadAt,
+    DateTime? UpdatedAt,
+    bool IsDeleted
+) : IRequest<Result<string>>;

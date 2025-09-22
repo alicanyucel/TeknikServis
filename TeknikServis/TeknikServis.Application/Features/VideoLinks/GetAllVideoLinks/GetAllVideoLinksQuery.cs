@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TeknikServis.Domain.Entities;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.VideoLinks.GetAllVideoLinks
-{
-    internal class GetAllVideoLinksQuery
-    {
-    }
-}
+namespace TeknikServis.Application.Features.VideoLinks.GetAllVideoLinks;
+
+public sealed record GetAllVideoLinkQuery : IRequest<Result<List<VideoLink>>>;
