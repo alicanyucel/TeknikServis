@@ -8,6 +8,7 @@ using TeknikServis.Application.Features.Persons.UpdatePerson;
 using TeknikServis.Application.Features.Products.CreateProduct;
 using TeknikServis.Application.Features.Products.UpdateProduct;
 using TeknikServis.Application.Features.ServiceActions.CreateServiceActions;
+using TeknikServis.Application.Features.ServiceActions.UpdateServiceAcrions;
 using TeknikServis.Application.Features.ServiceLineActions.CreateServiceLineActions;
 using TeknikServis.Application.Features.Statuses.CreateSratus;
 using TeknikServis.Application.Features.Statuses.UpdateStatus;
@@ -20,6 +21,7 @@ public sealed class CustomerMappingProfile : Profile
 {
     public CustomerMappingProfile()
     {
+        CreateMap<UpdateServiceActionCommand, ServiceAction>().ReverseMap();
         CreateMap<UpdatePersonCommand, Person>().ReverseMap()
         .ForMember(dest => dest.ExpertiseArea, opt => opt.MapFrom(src => ExpertiseArea.FromValue(src.ExpertiseArea)));
         CreateMap<UpdateProductCommand, Product>().ReverseMap()

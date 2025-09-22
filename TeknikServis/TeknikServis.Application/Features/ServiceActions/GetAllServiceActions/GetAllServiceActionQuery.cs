@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TeknikServis.Domain.Entities;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.ServiceActions.GetAllServiceActions
-{
-    internal class GetAllServiceActionQuery
-    {
-    }
-}
+namespace TeknikServis.Application.Features.ServiceActions.GetAllServiceActions;
+
+public sealed record GetAllServiceActionQuery : IRequest<Result<List<ServiceAction>>>;

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.ServiceActions.DeleteServiceActions
-{
-    internal class DeleteServiceActionsCommand
-    {
-    }
-}
+namespace TeknikServis.Application.Features.ServiceActions.DeleteServiceActions;
+
+public sealed record DeleteServiceActionsCommand(Guid Id) : IRequest<Result<string>>;
