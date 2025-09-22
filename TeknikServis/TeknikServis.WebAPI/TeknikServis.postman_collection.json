@@ -1,0 +1,31 @@
+{
+  "info": {
+    "name": "TeknikServis API",
+    "_postman_id": "12345678-1234-1234-1234-123456789abc",
+    "description": "TeknikServis API örnek koleksiyonu",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Statuses",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "http://localhost:5000/api/statuses/getallstatus", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "statuses", "getallstatus"] },
+        "body": { "mode": "raw", "raw": "{}" }
+      }
+    },
+    {
+      "name": "Create Customer",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "http://localhost:5000/api/customers", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "customers"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ahmet\",\n  \"surname\": \"Yýlmaz\",\n  \"phoneNumber\": \"+905551234567\",\n  \"email\": \"ahmet@example.com\",\n  \"address\": {\n    \"addressLine\": \"Örnek Mah. No:1\",\n    \"city\": \"Ýstanbul\",\n    \"neighborhood\": \"Moda\",\n    \"district\": \"Kadýköy\",\n    \"zipCode\": \"34000\",\n    \"country\": \"Türkiye\"\n  },\n  \"customerType\": 1\n}"
+        }
+      }
+    }
+  ]
+}
