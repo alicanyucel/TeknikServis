@@ -1,11 +1,8 @@
 using DefaultCorsPolicyNugetPackage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.OpenApi.Models;
-using System.Data;
-using System.Text.Json;
 using System.Threading.RateLimiting;
 using TeknikServis.Application;
 using TeknikServis.Infrastructure;
