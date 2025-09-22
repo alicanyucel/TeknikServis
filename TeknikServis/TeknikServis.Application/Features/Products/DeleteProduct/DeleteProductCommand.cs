@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.Products.DeleteProduct
-{
-    internal class DeleteProductCommand
-    {
-    }
-}
+namespace TeknikServis.Application.Features.Products.DeleteProduct;
+
+public sealed record DeleteProductCommand(Guid Id) : IRequest<Result<string>>;

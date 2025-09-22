@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TeknikServis.Domain.Entities;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.Products.GetAllProduct
-{
-    internal class GetAllProductQuery
-    {
-    }
-}
+namespace TeknikServis.Application.Features.Products.GetAllProduct;
+
+public sealed record GetAllProductQuery : IRequest<Result<List<Product>>>;

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TeknikServis.Domain.Entities;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.Products.GetByIdProduct
-{
-    internal class GerByIdProductQuery
-    {
-    }
-}
+namespace TeknikServis.Application.Features.Products.GetByIdProduct;
+
+public sealed record GetProductByIdQuery(Guid Id) : IRequest<Result<Product>>;
