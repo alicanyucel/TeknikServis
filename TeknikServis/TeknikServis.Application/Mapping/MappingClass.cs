@@ -6,6 +6,7 @@ using TeknikServis.Application.Features.Products.CreateProduct;
 using TeknikServis.Application.Features.ServiceActions.CreateServiceActions;
 using TeknikServis.Application.Features.Statuses.CreateSratus;
 using TeknikServis.Application.Features.Statuses.UpdateStatus;
+using TeknikServis.Application.Features.VideoLinks.CrateVideoLinks;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Enums;
 
@@ -13,6 +14,7 @@ public sealed class CustomerMappingProfile : Profile
 {
     public CustomerMappingProfile()
     {
+        CreateMap<CreateVideoLinkCommand, VideoLink>().ReverseMap();
         CreateMap<CreateProductCommand, Product>().ReverseMap()
         .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => ProductType.FromValue(src.ProductType)));
         CreateMap<UpdateStatusCommand, Status>().ReverseMap();
