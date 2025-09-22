@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TeknikServis.Domain.Entities;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.Persons.GetAllPerson
-{
-    internal class GetAllPersonQuery
-    {
-    }
-}
+namespace TeknikServis.Application.Features.Persons.GetAllPerson;
+
+public sealed record GetAllPersonQuery : IRequest<Result<List<Person>>>;

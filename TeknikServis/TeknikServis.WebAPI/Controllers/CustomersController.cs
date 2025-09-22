@@ -16,7 +16,6 @@ public class CustomersController : ApiController
     public CustomersController(IMediator mediator) : base(mediator)
     {
     }
-
     [HttpPost]
     public async Task<IActionResult> CreateCustomer(CreateCustomerCommand request, CancellationToken cancellationToken)
     {

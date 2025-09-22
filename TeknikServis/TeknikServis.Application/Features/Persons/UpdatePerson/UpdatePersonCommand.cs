@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace TeknikServis.Application.Features.Persons.UpdatePerson
-{
-    internal class UpdatePersonCommand
-    {
-    }
-}
+namespace TeknikServis.Application.Features.Persons.UpdatePerson;
+
+public sealed record UpdatePersonCommand(
+Guid Id,
+string Name,
+string LastName,
+int ExpertiseArea,
+TimeOnly UpdatedTime,
+string UpdatedBy,
+string CreatedBy,
+TimeOnly CratedTime,
+DateTime CreateadAt,
+DateTime? UpdatedAt,
+bool IsDeleted
+) : IRequest<Result<string>>;
