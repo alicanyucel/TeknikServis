@@ -27,6 +27,7 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
         {
             UserName = isEmail ? request.EmailOrUserName.Split('@')[0] : request.EmailOrUserName,
             Email = isEmail ? request.EmailOrUserName : null
+            
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);

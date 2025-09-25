@@ -33,7 +33,7 @@ public class CustomersController : ApiController
 
     }
     [HttpPost]
-    public async Task<IActionResult> CutomerDelete(DeleteCustomerCommand request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CustomerDelete(DeleteCustomerCommand request, CancellationToken cancellationToken)
     {
         await _mediator.Send(request, cancellationToken);
 

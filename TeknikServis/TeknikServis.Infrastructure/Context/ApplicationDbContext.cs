@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Enums;
-using TeknikServis.Domain.ValueObjects;
 
 namespace TeknikServis.Infrastructure.Context;
 
@@ -25,6 +24,48 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     {
         base.OnModelCreating(builder);
 
+        // AppUser yapılandırması
+        builder.Entity<AppUser>(b =>
+        {
+            b.ToTable("AppUsers");
+
+            b.Property(u => u.FirstName)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            b.Property(u => u.LastName)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            b.Property(u => u.RefreshToken)
+                .HasMaxLength(500);
+
+            b.Property(u => u.RefreshTokenExpires);
+        });
+
+        // AppRole yapılandırması
+        builder.Entity<AppRole>(b =>
+        {
+            b.ToTable("AppRoles");
+
+            b.Property(r => r.Name)
+                .HasMaxLength(100)
+                .IsRequired();
+        });
+
+        // IdentityUserRole yapılandırması
+        builder.Entity<IdentityUserRole<Guid>>(b =>
+        {
+            b.ToTable("AppUserRoles");
+            b.HasKey(ur => new { ur.UserId, ur.RoleId });
+        });
+
+        // Diğer Identity tabloları
+        builder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims");
+        builder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins");
+        builder.Entity<IdentityRoleClaim<Guid>>().ToTable("RoleClaims");
+        builder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens");
+
         // Address as owned type on Customer
         builder.Entity<Customer>().OwnsOne(c => c.Address, a =>
         {
@@ -39,24 +80,15 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
         // SmartEnum conversions
         builder.Entity<Customer>()
             .Property(c => c.CustomerType)
-            .HasConversion(
-                v => v.Name,
-                v => CustomerType.FromName(v, false)
-            );
+            .HasConversion(v => v.Name, v => CustomerType.FromName(v, false));
 
         builder.Entity<Product>()
             .Property(p => p.ProductType)
-            .HasConversion(
-                v => v.Name,
-                v => ProductType.FromName(v, false)
-            );
+            .HasConversion(v => v.Name, v => ProductType.FromName(v, false));
 
         builder.Entity<Person>()
             .Property(p => p.ExpertiseArea)
-            .HasConversion(
-                v => v.Name,
-                v => ExpertiseArea.FromName(v, false)
-            );
+            .HasConversion(v => v.Name, v => ExpertiseArea.FromName(v, false));
 
         // ServiceLineAction relationships
         builder.Entity<ServiceLineAction>(b =>
@@ -127,12 +159,5 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
 
         // Apply configurations
         builder.ApplyConfigurationsFromAssembly(typeof(DependencyInjection).Assembly);
-
-        // Ignore Identity tables not used
-        builder.Ignore<IdentityUserLogin<Guid>>();
-        builder.Ignore<IdentityRoleClaim<Guid>>();
-        builder.Ignore<IdentityUserToken<Guid>>();
-        builder.Ignore<IdentityUserRole<Guid>>();
-        builder.Ignore<IdentityUserClaim<Guid>>();
     }
 }

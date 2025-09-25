@@ -2,7 +2,6 @@
 
 namespace TeknikServis.Domain.Entities;
 
-
 public sealed class AppUserRole : IdentityUserRole<Guid>
 {
 }

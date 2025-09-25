@@ -2,4 +2,5 @@
 
 public sealed record GetAllRolesQueryResponse(
     Guid Id,
-    string Name);
+    string Name
+);
