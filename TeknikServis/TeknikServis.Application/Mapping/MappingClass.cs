@@ -13,6 +13,7 @@ using TeknikServis.Application.Features.ServiceLineActions.CreateServiceLineActi
 using TeknikServis.Application.Features.Statuses.CreateSratus;
 using TeknikServis.Application.Features.Statuses.UpdateStatus;
 using TeknikServis.Application.Features.Users.CreateUser;
+using TeknikServis.Application.Features.Users.UpdateUser;
 using TeknikServis.Application.Features.VideoLinks.CrateVideoLinks;
 using TeknikServis.Application.Features.VideoLinks.UpdateVideoLinks;
 using TeknikServis.Domain.Entities;
@@ -22,6 +23,7 @@ public sealed class CustomerMappingProfile : Profile
 {
     public CustomerMappingProfile()
     {
+        CreateMap<UpdateUserCommand, AppUser>().ReverseMap();
         CreateMap<CreateUserCommand, AppUser>().ReverseMap();
         CreateMap<UpdateServiceActionCommand, ServiceAction>().ReverseMap();
         CreateMap<UpdatePersonCommand, Person>().ReverseMap()
