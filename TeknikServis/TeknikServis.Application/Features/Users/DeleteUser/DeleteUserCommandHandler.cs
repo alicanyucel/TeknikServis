@@ -19,14 +19,18 @@ public sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand
     public async Task<Result<string>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByExpressionAsync(
-            x => x.Id == request.Id,
+            x => x.Id == request.Id && !x.IsDeleted,
             cancellationToken
         );
 
-        if (user == null)
-            return Result<string>.Failure("Kullanıcı bulunamadı.");
-        _userRepository.Delete(user);
+        if (user is null)
+            return Result<string>.Failure("Kullanıcı bulunamadı veya zaten silinmiş.");
+
+        user.IsDeleted = true;
+      
+        _userRepository.Update(user);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return "Kullanıcı silindi";
+
+        return Result<string>.Succeed("Kullanıcı başarıyla silindi (soft delete).");
     }
 }
