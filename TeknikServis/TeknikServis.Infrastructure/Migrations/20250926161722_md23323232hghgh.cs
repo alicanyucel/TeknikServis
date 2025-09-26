@@ -15,7 +15,7 @@ namespace TeknikServis.Infrastructure.Migrations
                 table: "AppUsers",
                 type: "bit",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: false); //
         }
 
         /// <inheritdoc />
