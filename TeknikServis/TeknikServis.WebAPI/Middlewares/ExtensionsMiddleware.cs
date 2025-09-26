@@ -43,13 +43,17 @@ public static class ExtensionsMiddleware
                 }
             }
 
-            // Admin rolünü ata (her durumda kontrol et)
-            if (!userManager.IsInRoleAsync(user, RoleNames.Admin).GetAwaiter().GetResult())
+            // Admin, User ve Customer rollerini ata
+            var desiredRoles = new[] { RoleNames.Admin, RoleNames.User, RoleNames.Customer };
+            foreach (var roleName in desiredRoles)
             {
-                var addRoleResult = userManager.AddToRoleAsync(user, RoleNames.Admin).GetAwaiter().GetResult();
-                if (!addRoleResult.Succeeded)
+                if (!userManager.IsInRoleAsync(user, roleName).GetAwaiter().GetResult())
                 {
-                    throw new Exception(string.Join("; ", addRoleResult.Errors.Select(e => e.Description)));
+                    var addRoleResult = userManager.AddToRoleAsync(user, roleName).GetAwaiter().GetResult();
+                    if (!addRoleResult.Succeeded)
+                    {
+                        throw new Exception(string.Join("; ", addRoleResult.Errors.Select(e => e.Description)));
+                    }
                 }
             }
         }
