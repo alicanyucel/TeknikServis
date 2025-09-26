@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeknikServis.Application.Constanst;
 using TeknikServis.Application.Features.Users.CreateUser;
 using TeknikServis.Application.Features.Users.DeleteUser;
 using TeknikServis.Application.Features.Users.GetAllUser;
@@ -10,13 +11,13 @@ using TeknikServis.WebAPI.Abstractions;
 
 namespace TeknikServis.WebAPI.Controllers;
 
-[AllowAnonymous]
 public class UsersController : ApiController
 {
     public UsersController(IMediator mediator) : base(mediator)
     {
     }
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer )]
     public async Task<IActionResult> CreateUser(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
@@ -25,6 +26,7 @@ public class UsersController : ApiController
 
 
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
     public async Task<IActionResult> UserGetById(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
@@ -33,6 +35,7 @@ public class UsersController : ApiController
 
     }
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
     public async Task<IActionResult> UserDelete(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         await _mediator.Send(request, cancellationToken);
@@ -41,12 +44,14 @@ public class UsersController : ApiController
     }
 
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
     public async Task<IActionResult> GetAllUsers(GetAllUserQuery request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
         return Ok(response);
     }
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
     public async Task<IActionResult> UpdateUser(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
