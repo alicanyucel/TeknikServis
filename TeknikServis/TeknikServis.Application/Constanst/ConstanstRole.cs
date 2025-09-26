@@ -2,6 +2,13 @@
 
 namespace TeknikServis.Application.Constanst;
 
+public static class RoleNames
+{
+    public const string Admin = "Admin";
+    public const string User = "User";
+    public const string Customer = "Customer";
+}
+
 public static class ConstantsRole
 {
     public static List<AppRole> GetRoles()
@@ -11,20 +18,20 @@ public static class ConstantsRole
             new AppRole
             {
                 Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                Name = "Admin",
-                NormalizedName = "ADMIN"
+                Name = RoleNames.Admin,
+                NormalizedName = RoleNames.Admin.ToUpperInvariant()
             },
             new AppRole
             {
                 Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                Name = "User",
-                NormalizedName = "USER"
+                Name = RoleNames.User,
+                NormalizedName = RoleNames.User.ToUpperInvariant()
             },
             new AppRole
             {
                 Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                Name = "Customer",
-                NormalizedName = "CUSTOMER"
+                Name = RoleNames.Customer,
+                NormalizedName = RoleNames.Customer.ToUpperInvariant()
             }
         };
     }

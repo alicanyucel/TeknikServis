@@ -64,7 +64,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseExceptionHandler();
-app.UseRateLimiter(); 
+app.UseRateLimiter();
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.Use(async (context, next) =>
 {
     const int LIMIT = 100;

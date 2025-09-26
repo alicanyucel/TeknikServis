@@ -25,8 +25,14 @@ namespace TeknikServis.Infrastructure.Services
                 new Claim("UserName", user.UserName ?? "")
             };
 
-            DateTime expires = DateTime.UtcNow.AddMonths(1);
+            // ROLLERİ CLAIM OLARAK EKLE
+            var roles = await userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
+            DateTime expires = DateTime.UtcNow.AddMonths(1);
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey));
 

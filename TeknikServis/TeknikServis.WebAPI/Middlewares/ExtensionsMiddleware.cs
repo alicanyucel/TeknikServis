@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using TeknikServis.Application.Constanst;
 using TeknikServis.Domain.Entities;
 
 namespace TeknikServis.WebAPI.Middlewares;
@@ -10,19 +11,46 @@ public static class ExtensionsMiddleware
         using (var scoped = app.Services.CreateScope())
         {
             var userManager = scoped.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+            var roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
 
-            if (!userManager.Users.Any(p => p.UserName == "admin"))
+            // Tüm rolleri seedle
+            foreach (var role in ConstantsRole.GetRoles())
             {
-                AppUser user = new()
+                if (!roleManager.RoleExistsAsync(role.Name!).GetAwaiter().GetResult())
                 {
-                    UserName = "admin",
+                    roleManager.CreateAsync(new AppRole { Id = role.Id, Name = role.Name, NormalizedName = role.NormalizedName }).GetAwaiter().GetResult();
+                }
+            }
+
+            // Admin kullanıcısı yoksa oluştur
+            const string adminUserName = "admin";
+            var user = userManager.Users.FirstOrDefault(p => p.UserName == adminUserName);
+            if (user is null)
+            {
+                user = new AppUser
+                {
+                    UserName = adminUserName,
                     Email = "admin@admin.com",
                     FirstName = "Mudbey",
                     LastName = "Yazılım",
                     EmailConfirmed = true
                 };
 
-                userManager.CreateAsync(user, "Mudbey123.").Wait();
+                var createResult = userManager.CreateAsync(user, "Mudbey123.").GetAwaiter().GetResult();
+                if (!createResult.Succeeded)
+                {
+                    throw new Exception(string.Join("; ", createResult.Errors.Select(e => e.Description)));
+                }
+            }
+
+            // Admin rolünü ata (her durumda kontrol et)
+            if (!userManager.IsInRoleAsync(user, RoleNames.Admin).GetAwaiter().GetResult())
+            {
+                var addRoleResult = userManager.AddToRoleAsync(user, RoleNames.Admin).GetAwaiter().GetResult();
+                if (!addRoleResult.Succeeded)
+                {
+                    throw new Exception(string.Join("; ", addRoleResult.Errors.Select(e => e.Description)));
+                }
             }
         }
     }
