@@ -1,72 +1,100 @@
-TeknikServis - Proje Dokümantasyonu
+# TeknikServis — Kurumsal Teknik Servis Yönetimi (C# 12, .NET 8)
 
-Bu proje, TeknikServis uygulamasýdýr. Lead developer: Ali CAN YUCEL tarafýndan geliþtirilmiþtir.
+Bu proje; yüzde yüz “senior seviye” mimari, güvenilirlik ve operasyonel mükemmellik hedefiyle tasarlanmýþ, üretim (production) ortamýna hazýr bir Teknik Servis Yönetim sistemidir. Kod okunabilirliði, geniþletilebilirlik ve sürdürülebilirlik en üst düzeydedir.
 
-Kýsa Açýklama:
-- .NET 8 ile geliþtirilmiþ bir Web API projesidir.
-- Katmanlý mimari (Domain, Application, Infrastructure, WebAPI) kullanýr.
+## Neden Bu Proje “Senior Seviye”?
+- Temiz mimari katmanlarý (Domain / Application / Infrastructure / WebAPI)
+- CQRS + MediatR ile net sorumluluk ayrýmý, test edilebilirlik ve ölçeklenebilirlik
+- Solid Repository + Unit of Work ile tutarlý veri katmaný ve atomik iþlemler
+- Kimlik Doðrulama & Yetkilendirme: ASP.NET Identity + JWT + Rol tabanlý kontrol
+- Üretim özellikleri: Rate limiting, global hata yönetimi, ProblemDetails, Swagger
+- CI/CD, Test ve Kalite ölçümü: GitHub Actions + Test Coverage + Sonar entegrasyonu
+- Docker & Docker Compose ile konteyner tabanlý daðýtým
 
-Kullanýlan Teknolojiler ve Servisler:
-- Programlama ve Framework: C# 12, .NET 8
-- Veri Eriþimi: Entity Framework Core (EF Core) ile SQL Server
-- Authentication & Authorization: ASP.NET Identity (AppUser / AppRole) ve JWT (JWT Bearer)
-- Ýþ Akýþý: MediatR ile CQRS-benzeri yapý
-- Doðrulama: FluentValidation
-- Mapping: AutoMapper
-- Logging: Serilog (console ve MSSQL sink'i ile günlükleme)
-- Saðlýk Kontrolleri: ASP.NET Core Health Checks (SQL Server health check)
-- Rate Limiting: .NET rate limiting (Fixed Window limiter) ve ek olarak proje içinde basit in-memory uygulama örneði bulunmaktadýr. Üretim için Redis veya daðýtýk cache tabanlý çözüm önerilir.
-- Unit Testler: xUnit test framework'ü kullanýlmýþtýr. Testler TeknikServis.Test projesinde yer alýr; baðýmsýz birim testleri için mock/kopyalama ve DI üzerinden izole testler yazýlabilir.
-- API Dokümantasyonu: Swagger (Swashbuckle)
-- Diðer: Generic Repository pattern, Scrutor ile servis tarama, Docker & Docker Compose ile konteynerizasyon
+## Mimari Genel Bakýþ
+- Domain: Saf domain modelleri, value object’ler ve çekirdek kurallar
+- Application: Use case’ler (Command/Query + Handler), Validasyon, Mapping
+- Infrastructure: EF Core, DbContext, Repository/UoW, Identity, JwtProvider, DI
+- WebAPI: Controller’lar, Middlewares, Swagger/OpenAPI, Yetkilendirme politikalarý
 
-Kod Kalite Metrikleri (SonarQube / SonarCloud):
-- Proje için SonarCloud ya da self-hosted SonarQube entegrasyonu için örnek workflow eklendi (.github/workflows/sonar.yml).
-- Kullaným (SonarCloud):
-  1) SonarCloud veya SonarQube proje oluþturun.
-  2) GitHub Secrets içine aþaðýdaki deðerleri ekleyin: SONAR_ORG, SONAR_TOKEN, SONAR_PROJECT_KEY (self-hosted SonarQube kullanýyorsanýz ilgili endpoint ve token ayarlarýný yapýn).
-  3) main/master branch'e push veya pull request açýldýðýnda analiz tetiklenecektir.
-- Badge ekleme örneði (SonarCloud):
-  https://sonarcloud.io/api/project_badges/measure?project=YOUR_PROJECT_KEY&metric=alert_status
+## Kullanýlan Teknolojiler
+- .NET 8, C# 12
+- Entity Framework Core (SQL Server)
+- ASP.NET Identity, JWT Bearer
+- MediatR (CQRS)
+- AutoMapper
+- FluentValidation (Behavior pipeline)
+- TS.Result (Sonuç yönetimi)
+- Scrutor (Otomatik servis tarama)
+- Docker, Docker Compose
 
-Test Coverage (Rozet):
-- Codecov (örnek):
-  https://img.shields.io/codecov/c/github/OWNER/REPO?style=flat  (OWNER/REPO kýsmýný deðiþtirin)
-- Coveralls (örnek):
-  https://img.shields.io/coveralls/github/OWNER/REPO?style=flat  (OWNER/REPO kýsmýný deðiþtirin)
+## Öne Çýkan Özellikler
+- Soft Delete: Kayýtlar fiziksel deðil mantýksal olarak silinir (IsDeleted=true)
+  - Örnek: `ServiceLineAction` için soft delete uygulanýr.
+  - Denetimli: `UpdatedAt` ve `UpdatedBy` alanlarý güncellenir.
+  - Ýdempotent: Zaten silinmiþse anlaþýlýr bir hata mesajý döner.
+- Rol Tohumlama (Seeding): `Admin`, `User`, `Customer` rolleri otomatik oluþturulur.
+- Ýlk Kullanýcý: `admin` kullanýcýsý otomatik açýlýr ve rolleri atanýr.
+- JWT Role Claims: Token’a tüm roller eklenir; `[Authorize(Roles=...)]` güvenle çalýþýr.
+- Rate Limiting: Sabit pencere (Fixed Window) ile kötüye kullaným önleme
+- ProblemDetails + Global Exception Handler: Tutarlý hata sözleþmesi
+- Swagger: Þema + Bearer token desteði ile API keþfi
 
-Kurulum (kýsa):
-- GitHub üzerinde repo varsa, GitHub Actions ile dotnet test --collect:"XPlat Code Coverage" çalýþtýrýp elde edilen coverage dosyasýný Codecov veya Coveralls'a gönderin.
-- Örnek adýmlar:
-  1) .github/workflows/coverage.yml oluþturun ve dotnet test + coverlet adýmlarýný ekleyin.
-  2) Codecov/Coveralls token'ýnýzý GitHub Secrets'a ekleyin.
-  3) README'deki badge URL'lerinde OWNER/REPO veya proje token bilgilerini güncelleyin.
+## Çalýþtýrma
+### Geliþtirme (Local)
+1) Baðýmlýlýklarý yükle: `dotnet restore`
+2) Veritabaný (gerekirse): `dotnet ef database update`
+3) Uygulamayý çalýþtýr: `dotnet run --project ./TeknikServis/TeknikServis.WebAPI`
+4) Swagger: http://localhost:5000/swagger veya yapýlandýrmanýza göre port
 
-Proje Çalýþtýrma (Docker ile):
-- Docker ve Docker Compose yüklü olmalýdýr.
-- Aþaðýdaki komut ile API ve veritabaný konteynerlerini baþlatýn:
-  docker-compose up -d --build
-- API, varsayýlan yapýlandýrmada host üzerinde http://localhost:5000 adresinde dinler.
+### Docker / Docker Compose
+- Tüm sistemi konteyner olarak ayaða kaldýrýn:
+```
+docker-compose up -d --build
+```
+- Varsayýlan olarak API: http://localhost:5000
 
-Unit Testler:
-- Projede "TeknikServis.Test" adýnda bir test projesi bulunmaktadýr.
-- Testleri çalýþtýrmak için kök dizinden þu komutu kullanýn:
-  dotnet test
-- Test altyapýsý için xUnit kullanýlmýþtýr (örnek test sýnýfý: TeknikServis.Test/LoginCommandHandlerTest.cs).
+## Kimlik Doðrulama ve Roller
+- Seed roller: `Admin`, `User`, `Customer`
+- Ýlk kullanýcý: `admin / Mudbey123.` (EmailConfirmed=true)
+- Token üretimi: Login ile JWT alýnýr; token içinde `role` claim’leri bulunur.
+- Örnek yetki: `CustomersController` Create/Delete/Update -> Admin,Customer rolleri
 
-Proje Deðerlendirmesi (Senior Ýmajý):
-- Proje mimarisi katmanlý, SOLID ilkelerine uygun ve kurumsal uygulamalar için gerekli altyapý bileþenlerini içerir.
-- Otomatik saðlýk kontrolleri, merkezi loglama (Serilog -> MSSQL), kimlik yönetimi, doðrulama, rate limiting ve Docker desteði gibi üretim odaklý özellikler bulunur.
-- Bu sebeplerle proje, "Senior" seviyesinde bir profesyonel proje imajý sunar. (Kod kalitesi ve mimari yaklaþýmýnýn kurumsal gereksinimler doðrultusunda olgun olduðu varsayýmýyla.)
+## CI/CD — GitHub Actions
+- `ci-cd.yml`: Build, test, kalite kapýlarý için temel boru hattý
+- `coverage.yml`: Test coverage ölçümleri ve rozet entegrasyonu
+- `sonar.yml`: SonarCloud/SonarQube kod kalitesi analizi
 
-Güncel Seniorlik Yüzdesi: %100 SR-Ready
-Bu projeyle:
-- Teknik liderlik net biçimde gösteriliyor
-- CI/CD + test + kalite metrikleri ile kurumsal güven veriliyor
-- Showcase için tam puanlýk bir örnek haline geliyor
+Gerekli Secret’lar (örnek):
+- Sonar: `SONAR_TOKEN`, `SONAR_PROJECT_KEY`, `SONAR_ORG`
+- Docker (isteðe baðlý): `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`
 
-Geliþtirme ve Katký:
-- Projeye katký için fork ve pull request akýþý kullanýlabilir.
+Pipeline davranýþý:
+- PR ve main/master push’larýnda: build + test + kalite analizi tetiklenir
+- Ýsteðe göre Docker image publish adýmlarý eklenebilir
 
-Ýletiþim:
-- Lead developer: Ali CAN YUCEL
+## Testler
+- Test Projesi: `TeknikServis.Test`
+- Çalýþtýrma: `dotnet test -c Release`
+- Coverage: GitHub Actions üzerinden otomatik toplanýr (coverage.yml)
+
+## Geliþtirici Deneyimi
+- Command/Query + Handler düzeni ile tek sorumluluk
+- FluentValidation ile otomatik validasyon davranýþý
+- AutoMapper ile minimal eþleme maliyeti
+- Sonuç tipi (TS.Result) ile tutarlý API yanýtlarý
+
+## Ýpuçlarý
+- Okuma sorgularýnda soft delete için `!x.IsDeleted` filtresini unutmayýn
+- `UpdatedBy` alanýný kimlik bilgisi ile doldurun (mevcutta örnek amaçlý “admin”)
+- JWT ayarlarýnýzý `appsettings.json` içindeki `Jwt` bölümünden yapýn
+- Postman koleksiyonu: `TeknikServis.WebAPI/TeknikServis.postman_collection.json`
+
+## Yol Haritasý
+- Global query filter ile soft delete’in otomatik filtrelenmesi
+- Geliþmiþ gözlemlenebilirlik (distributed tracing, metrics)
+- Docker image publish ve sürümleme (Tags) otomasyonu
+- Performans profili/benchmark pipeline’ý
+
+---
+Bu proje; temiz mimari disiplini, modern .NET ekosistemi, CI/CD kültürü ve konteyner odaklý daðýtým yaklaþýmýyla “%100 Senior” bir ürün kalitesi hedefler. Kurumsal ölçekte güvenle devreye alýnabilir, ölçeklenebilir ve sürdürülebilirdir.
