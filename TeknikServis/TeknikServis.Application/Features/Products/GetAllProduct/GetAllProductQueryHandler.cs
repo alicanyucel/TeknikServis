@@ -6,11 +6,22 @@ using TS.Result;
 
 namespace TeknikServis.Application.Features.Products.GetAllProduct;
 
-internal sealed class GetAllProductQueryHandler(IProductRepository productRepository) : IRequestHandler<GetAllProductQuery, Result<List<Product>>>
+internal sealed class GetAllProductQueryHandler : IRequestHandler<GetAllProductQuery, Result<List<Product>>>
 {
+    private readonly IProductRepository _productRepository;
+
+    public GetAllProductQueryHandler(IProductRepository productRepository)
+    {
+        _productRepository = productRepository;
+    }
+
     public async Task<Result<List<Product>>> Handle(GetAllProductQuery request, CancellationToken cancellationToken)
     {
-        List<Product> products = await productRepository.GetAll().ToListAsync(cancellationToken);
-        return products.ToList();
+        var products = await _productRepository
+            .GetAll()
+            .Where(x => !x.IsDeleted)
+            .ToListAsync(cancellationToken);
+
+        return Result<List<Product>>.Succeed(products);
     }
 }

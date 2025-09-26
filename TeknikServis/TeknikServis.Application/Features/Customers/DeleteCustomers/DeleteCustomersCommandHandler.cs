@@ -18,14 +18,21 @@ public sealed class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustome
     public async Task<Result<string>> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
     {
         var customer = await _customerRepository.GetByExpressionAsync(
-            x => x.Id == request.Id,
+            x => x.Id == request.Id && !x.IsDeleted,
             cancellationToken
         );
 
-        if (customer == null)
-            return Result<string>.Failure("Müşteri bulunamadı.");
-        _customerRepository.Delete(customer);
+        if (customer is null)
+            return Result<string>.Failure("Müşteri bulunamadı veya zaten silinmiş.");
+
+        customer.IsDeleted = true;
+        customer.UpdatedTime = TimeOnly.FromDateTime(DateTime.Now);
+        customer.UpdatedAt = DateTime.UtcNow;
+        customer.UpdatedBy = "admin"; 
+
+        _customerRepository.Update(customer);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return "Müşteri silindi";
+
+        return Result<string>.Succeed("Müşteri başarıyla silindi (soft delete).");
     }
 }

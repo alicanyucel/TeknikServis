@@ -19,14 +19,19 @@ public sealed class DeleteServiceLineActionCommandHandler : IRequestHandler<Dele
     public async Task<Result<string>> Handle(DeleteServiceLineActionCommand request, CancellationToken cancellationToken)
     {
         var slac = await _serviceLineActionRepository.GetByExpressionAsync(
-            x => x.Id == request.Id,
+            x => x.Id == request.Id && !x.IsDeleted,
             cancellationToken
         );
 
-        if (slac== null)
-            return Result<string>.Failure("Servisline actions bulunamadı.");
-        _serviceLineActionRepository.Delete(slac);
+        if (slac is null)
+            return Result<string>.Failure("Servisline actions bulunamadı veya zaten silinmiş.");
+
+        slac.IsDeleted = true;
+        slac.UpdatedAt = DateTime.UtcNow;
+        slac.UpdatedBy = "admin"; 
+        _serviceLineActionRepository.Update(slac);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return "ServiceLine Actions silindi";
+
+        return Result<string>.Succeed("Servisline actions başarıyla silindi (soft delete).");
     }
 }

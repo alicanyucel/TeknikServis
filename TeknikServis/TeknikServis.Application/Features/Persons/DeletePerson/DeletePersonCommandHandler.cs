@@ -19,14 +19,20 @@ public sealed class DeletePersonCommandHandler : IRequestHandler<DeletePersonCom
     public async Task<Result<string>> Handle(DeletePersonCommand request, CancellationToken cancellationToken)
     {
         var person = await _personRepository.GetByExpressionAsync(
-            x => x.Id == request.Id,
+            x => x.Id == request.Id && !x.IsDeleted,
             cancellationToken
         );
 
-        if (person == null)
-            return Result<string>.Failure("Personel bulunamadı.");
-        _personRepository.Delete(person);
+        if (person is null)
+            return Result<string>.Failure("Personel bulunamadı veya zaten silinmiş.");
+
+        person.IsDeleted = true;
+        person.UpdatedAt = DateTime.UtcNow;
+        person.UpdatedBy = "admin"; 
+
+        _personRepository.Update(person);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return "Personel silindi";
+
+        return Result<string>.Succeed("Personel başarıyla silindi (soft delete).");
     }
 }

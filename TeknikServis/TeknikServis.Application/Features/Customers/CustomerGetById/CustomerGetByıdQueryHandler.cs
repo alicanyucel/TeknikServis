@@ -1,25 +1,30 @@
 ﻿using AutoMapper;
 using MediatR;
+using TeknikServis.Application.Features.Customers.CustomerGetById;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Repositories;
 using TS.Result;
 
-namespace TeknikServis.Application.Features.Customers.CustomerGetById;
-
-public sealed class GetCustomerByIdQueryHandler(ICustomerRepository customerRepository, IMapper mapper) : IRequestHandler<GetCustomerByIdQuery, Result<Customer>>
+public sealed class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery, Result<Customer>>
 {
-    private readonly ICustomerRepository _customerRepository = customerRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly ICustomerRepository _customerRepository;
+    private readonly IMapper _mapper;
+
+    public GetCustomerByIdQueryHandler(ICustomerRepository customerRepository, IMapper mapper)
+    {
+        _customerRepository = customerRepository;
+        _mapper = mapper;
+    }
 
     public async Task<Result<Customer>> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
     {
         var customerEntity = await _customerRepository.GetByExpressionAsync(
-            x => x.Id == request.Id,
+            x => x.Id == request.Id && !x.IsDeleted,
             cancellationToken
         );
 
         if (customerEntity is null)
-            return Result<Customer>.Failure("Müşteri bulunamadı.");
+            return Result<Customer>.Failure("Müşteri bulunamadı veya silinmiş.");
 
         var customer = _mapper.Map<Customer>(customerEntity);
         return Result<Customer>.Succeed(customer);

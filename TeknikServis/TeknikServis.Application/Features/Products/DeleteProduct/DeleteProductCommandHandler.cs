@@ -12,21 +12,27 @@ public sealed class DeleteProductCommandHandler : IRequestHandler<DeleteProductC
 
     public DeleteProductCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
     {
-        _productRepository=productRepository;
+        _productRepository = productRepository;
         _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<string>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
         var product = await _productRepository.GetByExpressionAsync(
-            x => x.Id == request.Id,
+            x => x.Id == request.Id && !x.IsDeleted,
             cancellationToken
         );
 
-        if (product == null)
-            return Result<string>.Failure("Ürün bulunamadı.");
-        _productRepository.Delete(product);
+        if (product is null)
+            return Result<string>.Failure("Ürün bulunamadı veya zaten silinmiş.");
+
+        product.IsDeleted = true;
+        product.UpdatedAt = DateTime.UtcNow;
+        product.UpdatedBy = "admin"; 
+
+        _productRepository.Update(product);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return "Ürün silindi";
+
+        return Result<string>.Succeed("Ürün başarıyla silindi (soft delete).");
     }
 }

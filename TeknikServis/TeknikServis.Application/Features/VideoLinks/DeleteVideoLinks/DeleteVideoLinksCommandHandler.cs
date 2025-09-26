@@ -18,15 +18,21 @@ public sealed class DeleteVideoLinksCommandHandler : IRequestHandler<DeleteVideo
 
     public async Task<Result<string>> Handle(DeleteVideoLinkCommand request, CancellationToken cancellationToken)
     {
-        var videolink = await _videoLinkRepository.GetByExpressionAsync(
-            x => x.Id == request.Id,
+        var videoLink = await _videoLinkRepository.GetByExpressionAsync(
+            x => x.Id == request.Id && !x.IsDeleted,
             cancellationToken
         );
 
-        if (videolink == null)
-            return Result<string>.Failure("Video Link bulunamadı.");
-        _videoLinkRepository.Delete(videolink);
+        if (videoLink is null)
+            return Result<string>.Failure("Video Link bulunamadı veya zaten silinmiş.");
+
+        videoLink.IsDeleted = true;
+        videoLink.UpdatedAt = DateTime.UtcNow;
+        videoLink.UpdatedBy = "admin"; 
+
+        _videoLinkRepository.Update(videoLink);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return "Video Link silindi";
+
+        return Result<string>.Succeed("Video Link başarıyla silindi (soft delete).");
     }
 }

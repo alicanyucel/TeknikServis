@@ -17,7 +17,11 @@ internal sealed class GetAllServiceActionQueryHandler : IRequestHandler<GetAllSe
 
     public async Task<Result<List<ServiceAction>>> Handle(GetAllServiceActionQuery request, CancellationToken cancellationToken)
     {
-        List<ServiceAction> serviceActions = await _serviceActionRepository.GetAll().ToListAsync(cancellationToken);
+        var serviceActions = await _serviceActionRepository
+            .GetAll()
+            .Where(x => !x.IsDeleted)
+            .ToListAsync(cancellationToken);
+
         return Result<List<ServiceAction>>.Succeed(serviceActions);
     }
 }

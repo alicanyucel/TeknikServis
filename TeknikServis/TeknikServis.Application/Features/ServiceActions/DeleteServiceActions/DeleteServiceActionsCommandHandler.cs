@@ -18,15 +18,21 @@ public sealed class DeleteServiceActionCommandHandler : IRequestHandler<DeleteSe
 
     public async Task<Result<string>> Handle(DeleteServiceActionsCommand request, CancellationToken cancellationToken)
     {
-        var serviceActions = await _serviceActionRepository.GetByExpressionAsync(
-            x => x.Id == request.Id,
+        var serviceAction = await _serviceActionRepository.GetByExpressionAsync(
+            x => x.Id == request.Id && !x.IsDeleted,
             cancellationToken
         );
 
-        if (serviceActions == null)
-            return Result<string>.Failure("Service action bulunamadı.");
-        _serviceActionRepository.Delete(serviceActions);
+        if (serviceAction is null)
+            return Result<string>.Failure("Servis action bulunamadı veya zaten silinmiş.");
+
+        serviceAction.IsDeleted = true;
+        serviceAction.UpdatedAt = DateTime.UtcNow;
+        serviceAction.UpdatedBy = "admin"; 
+
+        _serviceActionRepository.Update(serviceAction);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return "Servis action silindi";
+
+        return Result<string>.Succeed("Servis action başarıyla silindi (soft delete).");
     }
 }

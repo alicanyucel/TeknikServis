@@ -6,11 +6,22 @@ using TS.Result;
 
 namespace TeknikServis.Application.Features.DocumentLinks.GetAllDocumentLink;
 
-internal sealed class GetAllDocumentLinkQueryHandler(IDocumentLinkRepository documentLinkRepository) : IRequestHandler<GetAllDocumentLinkQuery, Result<List<DocumentLink>>>
+internal sealed class GetAllDocumentLinkQueryHandler : IRequestHandler<GetAllDocumentLinkQuery, Result<List<DocumentLink>>>
 {
+    private readonly IDocumentLinkRepository _documentLinkRepository;
+
+    public GetAllDocumentLinkQueryHandler(IDocumentLinkRepository documentLinkRepository)
+    {
+        _documentLinkRepository = documentLinkRepository;
+    }
+
     public async Task<Result<List<DocumentLink>>> Handle(GetAllDocumentLinkQuery request, CancellationToken cancellationToken)
     {
-        List<DocumentLink> documentLinks = await documentLinkRepository.GetAll().ToListAsync(cancellationToken);
-        return documentLinks.ToList();
+        var documentLinks = await _documentLinkRepository
+            .GetAll()
+            .Where(x => !x.IsDeleted)
+            .ToListAsync(cancellationToken);
+
+        return Result<List<DocumentLink>>.Succeed(documentLinks);
     }
 }

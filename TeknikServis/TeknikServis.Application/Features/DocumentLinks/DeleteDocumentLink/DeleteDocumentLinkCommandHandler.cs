@@ -19,14 +19,20 @@ public sealed class DeleteDocumentLinkCommandHandler : IRequestHandler<DeleteDoc
     public async Task<Result<string>> Handle(DeleteDocumentLinkCommand request, CancellationToken cancellationToken)
     {
         var documentLink = await _documentLinkRepository.GetByExpressionAsync(
-            x => x.Id == request.Id,
+            x => x.Id == request.Id && !x.IsDeleted,
             cancellationToken
         );
 
-        if (documentLink == null)
-            return Result<string>.Failure("Döküment link bulunamadı.");
-        _documentLinkRepository.Delete(documentLink);
+        if (documentLink is null)
+            return Result<string>.Failure("Döküment link bulunamadı veya zaten silinmiş.");
+
+        documentLink.IsDeleted = true;
+        documentLink.UpdatedAt = DateTime.UtcNow;
+        documentLink.UpdatedBy = "admin"; 
+
+        _documentLinkRepository.Update(documentLink);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return "Dokümentink silindi";
+
+        return Result<string>.Succeed("Döküment link başarıyla silindi (soft delete).");
     }
 }

@@ -18,9 +18,15 @@ public sealed class GetAllStatusQueryHandler : IRequestHandler<GetAllStatusQuery
     public async Task<Result<List<StatusDto>>> Handle(GetAllStatusQuery request, CancellationToken cancellationToken)
     {
         var statuses = await _repository.GetAllAsync(cancellationToken);
-        if (statuses is null || statuses.Count == 0) 
-        return Result<List<StatusDto>>.Failure("Hiç durum bulunamadı.");
-        var dtoList = statuses.Select(s => new StatusDto(s.Id, s.Name)).ToList();
-        return Result<List<StatusDto>>.Succeed(dtoList); 
+
+        var activeStatuses = statuses
+            .Where(s => !s.IsDeleted)
+            .Select(s => new StatusDto(s.Id, s.Name))
+            .ToList();
+
+        if (activeStatuses.Count == 0)
+            return Result<List<StatusDto>>.Failure("Hiç aktif durum bulunamadı.");
+
+        return Result<List<StatusDto>>.Succeed(activeStatuses);
     }
 }

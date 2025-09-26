@@ -17,10 +17,14 @@ public sealed class GetStatusByIdQueryHandler : IRequestHandler<GetStatusByIdQue
 
     public async Task<Result<StatusDto>> Handle(GetStatusByIdQuery request, CancellationToken cancellationToken)
     {
-        var status = await _repository.GetByIdAsync(request.Id, cancellationToken);
+        var status = await _repository.GetByExpressionAsync(
+            x => x.Id == request.Id && !x.IsDeleted,
+            cancellationToken
+        );
 
         if (status is null)
-            return Result<StatusDto>.Failure("Belirtilen ID ile eşleşen durum bulunamadı.");
+            return Result<StatusDto>.Failure("Belirtilen ID ile eşleşen aktif durum bulunamadı.");
+
         var dto = new StatusDto(status.Id, status.Name);
         return Result<StatusDto>.Succeed(dto);
     }

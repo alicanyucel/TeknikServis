@@ -6,11 +6,22 @@ using TS.Result;
 
 namespace TeknikServis.Application.Features.Persons.GetAllPerson;
 
-internal sealed class GetAllPersonQueryHandler(IPersonRepository personRepository) : IRequestHandler<GetAllPersonQuery, Result<List<Person>>>
+internal sealed class GetAllPersonQueryHandler : IRequestHandler<GetAllPersonQuery, Result<List<Person>>>
 {
+    private readonly IPersonRepository _personRepository;
+
+    public GetAllPersonQueryHandler(IPersonRepository personRepository)
+    {
+        _personRepository = personRepository;
+    }
+
     public async Task<Result<List<Person>>> Handle(GetAllPersonQuery request, CancellationToken cancellationToken)
     {
-        List<Person> person = await personRepository.GetAll().ToListAsync(cancellationToken);
-        return person.ToList();
+        var persons = await _personRepository
+            .GetAll()
+            .Where(x => !x.IsDeleted)
+            .ToListAsync(cancellationToken);
+
+        return Result<List<Person>>.Succeed(persons);
     }
 }
