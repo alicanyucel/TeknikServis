@@ -24,7 +24,7 @@ public static class ConstantsRole
             new AppRole
             {
                 Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                Name = RoleNames.User,
+                Name = RoleNames.User, // PERSON USER TEK SEY DE ALDIK
                 NormalizedName = RoleNames.User.ToUpperInvariant()
             },
             new AppRole
