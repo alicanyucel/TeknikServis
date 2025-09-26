@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TeknikServis.Application.Dtos;
 using TeknikServis.Application.Features.Customers.CreateCustomer;
 using TeknikServis.Application.Features.Customers.UpdateCustomer;
 using TeknikServis.Application.Features.DocumentLinks.CreateDcumentLink;
@@ -23,6 +24,7 @@ public sealed class CustomerMappingProfile : Profile
 {
     public CustomerMappingProfile()
     {
+        CreateMap<AppUser, UserDto>().ReverseMap();
         CreateMap<UpdateUserCommand, AppUser>().ReverseMap();
         CreateMap<CreateUserCommand, AppUser>().ReverseMap();
         CreateMap<UpdateServiceActionCommand, ServiceAction>().ReverseMap();
