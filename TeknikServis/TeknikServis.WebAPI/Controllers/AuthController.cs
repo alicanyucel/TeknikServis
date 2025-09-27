@@ -56,7 +56,6 @@ public sealed class AuthController : ApiController
         });
     }
     [HttpPost]
-    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ApproveAsUser([FromBody] ApproveUserAsStandardCommand request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
