@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TeknikServis.Application.Features.Auth.AdminApproval;
 using TeknikServis.Application.Features.Auth.Login;
@@ -13,6 +15,17 @@ public sealed class AuthController : ApiController
 {
     public AuthController(IMediator mediator) : base(mediator)
     {
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+
+        return Ok(new
+        {
+            message = "Çıkış başarılı."
+        });
     }
 
     [HttpPost]
