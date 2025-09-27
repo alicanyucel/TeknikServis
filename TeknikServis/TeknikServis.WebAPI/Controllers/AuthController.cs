@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeknikServis.Application.Features.Auth.AdminApproval;
 using TeknikServis.Application.Features.Auth.Login;
 using TeknikServis.Application.Features.Auth.Register;
 using TeknikServis.WebAPI.Abstractions;
@@ -38,6 +39,26 @@ public sealed class AuthController : ApiController
         return BadRequest(new
         {
             message = "Kayıt başarısız.",
+            errors = response.ErrorMessages
+        });
+    }
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ApproveAsUser([FromBody] ApproveUserAsStandardCommand request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(request, cancellationToken);
+
+        if (response.IsSuccessful)
+        {
+            return Ok(new
+            {
+                message = "Kullanıcı başarıyla onaylandı."
+            });
+        }
+
+        return BadRequest(new
+        {
+            message = "Onaylama başarısız.",
             errors = response.ErrorMessages
         });
     }
