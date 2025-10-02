@@ -12,8 +12,8 @@ using TeknikServis.Infrastructure.Context;
 namespace TeknikServis.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250926110019_mghjsh23232389893e43090")]
-    partial class mghjsh23232389893e43090
+    [Migration("20251002143815_mdf3434343assd8855678787TT3E34334343434")]
+    partial class mdf3434343assd8855678787TT3E34334343434
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,16 +170,6 @@ namespace TeknikServis.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeOnly>("CratedTime")
-                        .HasColumnType("time");
-
-                    b.Property<DateTime>("CreateadAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -230,25 +220,11 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.Property<DateTime?>("RefreshTokenExpires")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Roles")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<TimeOnly>("UpdatedTime")
-                        .HasColumnType("time");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

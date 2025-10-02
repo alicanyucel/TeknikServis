@@ -5,25 +5,18 @@
 namespace TeknikServis.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class md23323232hghgh : Migration
+    public partial class mdf3434343assd8855678787TT3E3433434 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "IsDeleted",
-                table: "AppUsers",
-                type: "bit",
-                nullable: false,
-                defaultValue: false); //
+
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "IsDeleted",
-                table: "AppUsers");
+
         }
     }
 }

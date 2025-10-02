@@ -12,8 +12,8 @@ using TeknikServis.Infrastructure.Context;
 namespace TeknikServis.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250926161722_md23323232hghgh")]
-    partial class md23323232hghgh
+    [Migration("20251002135529_mdf3434343assd8855678787TT")]
+    partial class mdf3434343assd8855678787TT
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

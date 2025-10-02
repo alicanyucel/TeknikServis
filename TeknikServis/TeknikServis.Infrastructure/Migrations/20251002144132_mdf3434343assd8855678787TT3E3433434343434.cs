@@ -1,13 +1,11 @@
-﻿using k8s.KubeConfigModels;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace TeknikServis.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class md23323232 : Migration
+    public partial class mdf3434343assd8855678787TT3E3433434343434 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

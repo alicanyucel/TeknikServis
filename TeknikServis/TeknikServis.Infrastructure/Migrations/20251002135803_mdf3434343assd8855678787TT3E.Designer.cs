@@ -12,8 +12,8 @@ using TeknikServis.Infrastructure.Context;
 namespace TeknikServis.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250925090629_mg432434778989")]
-    partial class mg432434778989
+    [Migration("20251002135803_mdf3434343assd8855678787TT3E")]
+    partial class mdf3434343assd8855678787TT3E
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -181,6 +181,9 @@ namespace TeknikServis.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()

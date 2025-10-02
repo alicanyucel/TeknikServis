@@ -5,7 +5,7 @@
 namespace TeknikServis.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class mg43243477898933232 : Migration
+    public partial class mdf3434343assd8855678787TT3E343 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

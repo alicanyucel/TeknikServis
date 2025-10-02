@@ -23,7 +23,14 @@ namespace TeknikServis.Infrastructure
             // DbContext
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("SqlServer"));
+                options.UseSqlServer(configuration.GetConnectionString("SqlServer"), sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        errorNumbersToAdd: null
+                    );
+                });
             });
 
             // UnitOfWork

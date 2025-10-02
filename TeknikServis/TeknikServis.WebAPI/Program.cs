@@ -59,8 +59,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TeknikServisApi Mudbey Yazilým v1");
+        c.RoutePrefix = "swagger"; 
+    });
 }
+
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseExceptionHandler();
@@ -97,6 +103,5 @@ app.Use(async (context, next) =>
 });
 
 app.MapControllers();
-
 ExtensionsMiddleware.CreateFirstUser(app);
 app.Run();

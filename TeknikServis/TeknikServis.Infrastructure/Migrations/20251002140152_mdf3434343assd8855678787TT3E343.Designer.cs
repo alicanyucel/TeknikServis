@@ -12,8 +12,8 @@ using TeknikServis.Infrastructure.Context;
 namespace TeknikServis.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250926110347_mghjsh23232389893e4309034")]
-    partial class mghjsh23232389893e4309034
+    [Migration("20251002140152_mdf3434343assd8855678787TT3E343")]
+    partial class mdf3434343assd8855678787TT3E343
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,20 +102,11 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(34)
-                        .HasColumnType("nvarchar(34)");
-
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("AppUserRoles", (string)null);
-
-                    b.HasDiscriminator().HasValue("IdentityUserRole<Guid>");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -179,16 +170,6 @@ namespace TeknikServis.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeOnly>("CratedTime")
-                        .HasColumnType("time");
-
-                    b.Property<DateTime>("CreateadAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -239,25 +220,11 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.Property<DateTime?>("RefreshTokenExpires")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Roles")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<TimeOnly>("UpdatedTime")
-                        .HasColumnType("time");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -689,18 +656,6 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.ToTable("VideoLinks");
                 });
 
-            modelBuilder.Entity("TeknikServis.Domain.Entities.AppUserRole", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
-
-                    b.Property<Guid?>("AppUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasDiscriminator().HasValue("AppUserRole");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("TeknikServis.Domain.Entities.AppRole", null)
@@ -902,18 +857,6 @@ namespace TeknikServis.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("ServiceAction");
-                });
-
-            modelBuilder.Entity("TeknikServis.Domain.Entities.AppUserRole", b =>
-                {
-                    b.HasOne("TeknikServis.Domain.Entities.AppUser", null)
-                        .WithMany("UserRoles")
-                        .HasForeignKey("AppUserId");
-                });
-
-            modelBuilder.Entity("TeknikServis.Domain.Entities.AppUser", b =>
-                {
-                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.Customer", b =>
