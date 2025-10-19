@@ -61,7 +61,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TeknikServisApi Mudbey Yazilým v1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TeknikServisApi Mudbey Yazilým v2");
         c.RoutePrefix = "swagger"; 
     });
 }
