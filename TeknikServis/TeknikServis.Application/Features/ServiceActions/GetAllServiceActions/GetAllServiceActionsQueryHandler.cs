@@ -20,6 +20,19 @@ internal sealed class GetAllServiceActionQueryHandler : IRequestHandler<GetAllSe
         var serviceActions = await _serviceActionRepository
             .GetAll()
             .Where(x => !x.IsDeleted)
+            .Include(sa => sa.Person)
+            .Include(sa => sa.Status)
+            .Include(sa => sa.Customer)
+            .Include(sa => sa.DocumentLinks)
+            .Include(sa => sa.VideoLinks)
+            .Include(sa => sa.ServiceLineActions)
+                .ThenInclude(sla => sla.Product)
+            .Include(sa => sa.ServiceLineActions)
+                .ThenInclude(sla => sla.Person)
+            .Include(sa => sa.ServiceLineActions)
+                .ThenInclude(sla => sla.Customer)
+            .Include(sa => sa.ServiceLineActions)
+                .ThenInclude(sla => sla.Status)
             .ToListAsync(cancellationToken);
 
         return Result<List<ServiceAction>>.Succeed(serviceActions);
