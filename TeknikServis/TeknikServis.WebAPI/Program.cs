@@ -8,7 +8,7 @@ using TeknikServis.Application;
 using TeknikServis.Infrastructure;
 using TeknikServis.WebAPI.Middlewares;
 using TeknikServis.WebAPI.JsonConverters;
-
+//
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDefaultCors();
 builder.Services.AddApplication();
