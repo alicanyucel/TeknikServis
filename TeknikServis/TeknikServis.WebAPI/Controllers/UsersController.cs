@@ -16,7 +16,7 @@ public class UsersController : ApiController
     public UsersController(IMediator mediator) : base(mediator) { }
 
     [HttpPost]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
+    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User)]
     public async Task<IActionResult> CreateUser(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
@@ -26,6 +26,7 @@ public class UsersController : ApiController
     }
 
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> GetUserById(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
@@ -35,7 +36,7 @@ public class UsersController : ApiController
     }
 
     [HttpPost]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> DeleteUser(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
@@ -45,6 +46,7 @@ public class UsersController : ApiController
     }
 
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> GetAllUsers(GetAllUserQuery request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
@@ -54,7 +56,7 @@ public class UsersController : ApiController
     }
 
     [HttpPost]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
+    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User)]
     public async Task<IActionResult> UpdateUser(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
