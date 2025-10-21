@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using TeknikServis.Domain.Entities;
+using TeknikServis.Application.Dtos;
 using TS.Result;
 
 namespace TeknikServis.Application.Features.Users.GetByIdUser;
 
-public sealed record GetUserByIdQuery(Guid Id) : IRequest<Result<AppUser>>;
+public sealed record GetUserByIdQuery(Guid Id) : IRequest<Result<UserDto>>;
