@@ -21,7 +21,17 @@ public sealed class GetAllStatusQueryHandler : IRequestHandler<GetAllStatusQuery
 
         var activeStatuses = statuses
             .Where(s => !s.IsDeleted)
-            .Select(s => new StatusDto(s.Id, s.Name))
+            .Select(s => new StatusDto(
+                Id: s.Id,
+                Name: s.Name,
+                UpdatedTime: s.UpdatedTime,
+                UpdatedBy: s.UpdatedBy,
+                CreatedBy: s.CreatedBy,
+                CratedTime: s.CreatedTime,
+                CreateadAt: s.CreateadAt,
+                UpdatedAt: s.UpdatedAt,
+                IsDeleted: s.IsDeleted
+            ))
             .ToList();
 
         if (activeStatuses.Count == 0)

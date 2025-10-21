@@ -13,37 +13,51 @@ namespace TeknikServis.WebAPI.Controllers;
 [AllowAnonymous]
 public class StatusesController : ApiController
 {
-    public StatusesController(IMediator mediator) : base(mediator)
-    {
-    }
+    public StatusesController(IMediator mediator) : base(mediator) { }
+
     [HttpPost]
     public async Task<IActionResult> GetAllStatus(GetAllStatusQuery request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Servis durumları listelendi.", data = result.Data })
+            : BadRequest(new { message = "Durumlar listelenemedi: " + result.ErrorMessages });
     }
-    [HttpPost]
-    public async Task<IActionResult> DeleteStatus(DeleteStatusCommand request, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
-    }
-    [HttpPost]
-    public async Task<IActionResult> UpdateStatus(UpdateStatusCommand request, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
-    }
-    [HttpPost]
-    public async Task<IActionResult> CreateStatus(CreateStatusCommand request, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(request, cancellationToken);
-        return NoContent();
-    }
+
     [HttpPost]
     public async Task<IActionResult> GetByIdStatus(GetStatusByIdQuery request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Servis durumu bulundu.", data = result.Data })
+            : NotFound(new { message = "Servis durumu bulunamadı." });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateStatus(CreateStatusCommand request, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Servis durumu başarıyla oluşturuldu." })
+            : BadRequest(new { message = "Oluşturma başarısız: " + result.ErrorMessages });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateStatus(UpdateStatusCommand request, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Servis durumu güncellendi." })
+            : BadRequest(new { message = "Güncelleme başarısız: " + result.ErrorMessages });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteStatus(DeleteStatusCommand request, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Servis durumu silindi." })
+            : BadRequest(new { message = "Silme işlemi başarısız: " + result.ErrorMessages });
     }
 }
+
