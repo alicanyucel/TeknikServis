@@ -44,7 +44,6 @@ public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, 
             UpdatedAt: userEntity.UpdatedAt,
             IsDeleted: userEntity.IsDeleted
         );
-
         return Result<UserDto>.Succeed(userDto);
     }
 }

@@ -13,48 +13,54 @@ namespace TeknikServis.WebAPI.Controllers;
 
 public class UsersController : ApiController
 {
-    public UsersController(IMediator mediator) : base(mediator)
-    {
-    }
+    public UsersController(IMediator mediator) : base(mediator) { }
+
     [HttpPost]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer )]
+    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
     public async Task<IActionResult> CreateUser(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return NoContent();
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Kullanıcı başarıyla eklendi." })
+            : BadRequest(new { message = "Kullanıcı eklenemedi: " + result.ErrorMessages });
     }
 
-
     [HttpPost]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
-    public async Task<IActionResult> UserGetById(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserById(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
-        return Ok(result);
-
-
+        return result.IsSuccessful
+            ? Ok(new { message = "Kullanıcı bulundu.", data = result.Data })
+            : NotFound(new { message = "Kullanıcı bulunamadı." });
     }
+
     [HttpPost]
     [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
-    public async Task<IActionResult> UserDelete(DeleteUserCommand request, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteUser(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        await _mediator.Send(request, cancellationToken);
-
-        return NoContent();
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Kullanıcı silindi." })
+            : BadRequest(new { message = "Kullanıcı silinemedi: " + result.ErrorMessages });
     }
 
     [HttpPost]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
     public async Task<IActionResult> GetAllUsers(GetAllUserQuery request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Kullanıcılar listelendi.", data = result.Data })
+            : BadRequest(new { message = "Kullanıcılar listelenemedi: " + result.ErrorMessages });
     }
+
     [HttpPost]
     [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User + "," + RoleNames.Customer)]
     public async Task<IActionResult> UpdateUser(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Kullanıcı güncellendi." })
+            : BadRequest(new { message = "Güncelleme başarısız: " + result.ErrorMessages });
     }
 }
+
