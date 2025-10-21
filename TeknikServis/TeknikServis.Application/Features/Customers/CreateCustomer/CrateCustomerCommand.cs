@@ -8,7 +8,6 @@ public sealed record CreateCustomerCommand(
     string Name,
     string TcNo,
     string VkNo,
-
     string Surname,
     string PhoneNumber,
     string Email,

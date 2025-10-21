@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Districts\" />
-    <Folder Include="Features\Countries\" />
     <Folder Include="Features\Neighbourhoods\" />
     <Folder Include="Features\Provinces\" />
   </ItemGroup>
