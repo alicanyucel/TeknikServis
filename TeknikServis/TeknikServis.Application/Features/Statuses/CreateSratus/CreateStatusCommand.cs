@@ -5,11 +5,12 @@ namespace TeknikServis.Application.Features.Statuses.CreateSratus;
 
 public sealed record CreateStatusCommand(
     string Name,
+    Guid ProductId,
     TimeOnly UpdatedTime,
     string UpdatedBy,
     string CreatedBy,
-    TimeOnly CratedTime,
-    DateTime CreateadAt,
+    TimeOnly CreatedTime,
+    DateTime CreatedAt,
     DateTime? UpdatedAt,
     bool IsDeleted
 ) : IRequest<Result<string>>;

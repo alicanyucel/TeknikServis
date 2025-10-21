@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Enums;
 using TeknikServis.Infrastructure.Converters;
@@ -95,6 +96,12 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
         });
+        //prouct status
+             builder.Entity<Status>()
+            .HasOne(s => s.Product)
+            .WithMany(p => p.StatusHistory)
+            .HasForeignKey(s => s.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // Diğer Identity tabloları
         builder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims");

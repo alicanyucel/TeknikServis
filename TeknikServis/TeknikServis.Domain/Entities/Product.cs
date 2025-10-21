@@ -12,4 +12,6 @@ public sealed class Product : Entity<Guid>
     public Guid CustomerId { get; set; }
     public required Customer Customer { get; set; }
     public required ProductType ProductType { get; set; } = ProductType.Accessory;
+    public ICollection<Status> StatusHistory { get; set; } = new List<Status>();
+
 }
