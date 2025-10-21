@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Enums;
 
@@ -12,7 +11,10 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     IdentityUserClaim<Guid>, AppUserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>, IUnitOfWork
 {
     public ApplicationDbContext(DbContextOptions options) : base(options) { }
-
+    public DbSet<Country> Countries => Set<Country>();
+    public DbSet<Province> Provinces => Set<Province>();
+    public DbSet<District> Districts => Set<District>();
+    public DbSet<Neighbourhood> Neighbourhoods => Set<Neighbourhood>();
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Person> Persons => Set<Person>();
