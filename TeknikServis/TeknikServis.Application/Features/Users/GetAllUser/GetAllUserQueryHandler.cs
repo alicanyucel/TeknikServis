@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using TeknikServis.Application.Dtos;
 using TeknikServis.Domain.Repositories;
 using TS.Result;
@@ -31,6 +30,12 @@ internal sealed class GetAllUserQueryHandler : IRequestHandler<GetAllUserQuery, 
             LastName: user.LastName,
             Email: user.Email ?? string.Empty,
             Roles: user.UserRoles?.Select(ur => ur.Role?.Name ?? string.Empty).ToList() ?? new List<string>(),
+            UpdatedTime: user.UpdatedTime ?? default,
+            UpdatedBy: user.UpdatedBy ?? string.Empty,
+            CreatedBy: user.CreatedBy ?? string.Empty,
+            CratedTime: user.CratedTime ?? default,
+            CreateadAt: user.CreateadAt ?? default,
+            UpdatedAt: user.UpdatedAt,
             IsDeleted: user.IsDeleted
         )).ToList();
 

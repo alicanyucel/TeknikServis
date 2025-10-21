@@ -7,6 +7,7 @@ using System.Threading.RateLimiting;
 using TeknikServis.Application;
 using TeknikServis.Infrastructure;
 using TeknikServis.WebAPI.Middlewares;
+using TeknikServis.WebAPI.JsonConverters;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDefaultCors();
@@ -14,7 +15,10 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddMemoryCache();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(opts =>
+{
+    opts.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ExceptionHandler>();

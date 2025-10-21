@@ -36,7 +36,10 @@ public static class ExtensionsMiddleware
                     FirstName = "Mudbey",
                     LastName = "Yazılım",
                     EmailConfirmed = true,
-                    UserRoles= new List<AppUserRole>()
+                    UserRoles= new List<AppUserRole>(),
+                    CreateadAt = DateTime.UtcNow,
+                    CratedTime = TimeOnly.FromDateTime(DateTime.UtcNow),
+                    CreatedBy = "seed"
                 };
 
                 var createResult = userManager.CreateAsync(user, "Mudbey123.").GetAwaiter().GetResult();

@@ -22,4 +22,11 @@
     <ProjectReference Include="..\TeknikServis.Domain\TeknikServis.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Districts\" />
+    <Folder Include="Features\Countries\" />
+    <Folder Include="Features\Neighbourhoods\" />
+    <Folder Include="Features\Provinces\" />
+  </ItemGroup>
+
 </Project>

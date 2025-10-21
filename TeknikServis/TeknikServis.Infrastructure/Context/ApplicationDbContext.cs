@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Enums;
+using TeknikServis.Infrastructure.Converters;
 
 namespace TeknikServis.Infrastructure.Context;
 
