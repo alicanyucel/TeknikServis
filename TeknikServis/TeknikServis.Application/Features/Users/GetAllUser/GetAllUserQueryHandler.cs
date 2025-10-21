@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using TeknikServis.Application.Dtos;
 using TeknikServis.Domain.Repositories;
 using TS.Result;
@@ -15,11 +16,13 @@ internal sealed class GetAllUserQueryHandler : IRequestHandler<GetAllUserQuery, 
         _userRepository = userRepository;
     }
 
-    public async Task<Result<List<UserDto>>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<UserDto>>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
     {
         var userEntities = await _userRepository
             .GetAll()
             .Where(user => !user.IsDeleted)
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
             .ToListAsync(cancellationToken);
 
         var users = userEntities.Select(user => new UserDto(
@@ -27,6 +30,7 @@ internal sealed class GetAllUserQueryHandler : IRequestHandler<GetAllUserQuery, 
             FirstName: user.FirstName,
             LastName: user.LastName,
             Email: user.Email ?? string.Empty,
+            Roles: user.UserRoles?.Select(ur => ur.Role?.Name ?? string.Empty).ToList() ?? new List<string>(),
             IsDeleted: user.IsDeleted
         )).ToList();
 

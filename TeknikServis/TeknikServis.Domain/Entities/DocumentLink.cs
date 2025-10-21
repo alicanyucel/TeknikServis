@@ -2,7 +2,7 @@
 
 namespace TeknikServis.Domain.Entities;
 
-public sealed class DocumentLink : Entity
+public sealed class DocumentLink : Entity<Guid>
 {
     public string Url { get; set; } = default!;
     public string Description { get; set; } = default!;

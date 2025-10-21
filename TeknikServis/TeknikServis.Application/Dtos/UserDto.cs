@@ -5,13 +5,13 @@ public sealed record UserDto(
     string FirstName,
     string LastName,
     string Email,
-    string Password,
-    IList<string> Roles,
-    TimeOnly UpdatedTime,
-    string UpdatedBy,
-    string CreatedBy,
-    TimeOnly CratedTime,
-    DateTime CreateadAt,
-    DateTime? UpdatedAt,
-    bool IsDeleted
+    string Password = "",
+    IList<string> Roles = null!,
+    TimeOnly UpdatedTime = default,
+    string UpdatedBy = "",
+    string CreatedBy = "",
+    TimeOnly CratedTime = default,
+    DateTime CreateadAt = default,
+    DateTime? UpdatedAt = null,
+    bool IsDeleted = false
 );

@@ -3,7 +3,7 @@ using TeknikServis.Domain.Enums;
 
 namespace TeknikServis.Domain.Entities;
 
-public sealed class Product : Entity
+public sealed class Product : Entity<Guid>
 {
     public string Brand { get; set; } = default!;
     public string Model { get; set; } = default!;

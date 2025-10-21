@@ -2,7 +2,7 @@
 
 namespace TeknikServis.Domain.Entities;
 
-public class Status : Entity
+public class Status : Entity<Guid>
 {
     public string Name { get; set; } = default!;
 

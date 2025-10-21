@@ -1,7 +1,7 @@
 ﻿using TeknikServis.Domain.Abstractions;
 namespace TeknikServis.Domain.Entities;
 
-public sealed class ServiceLineAction : Entity
+public sealed class ServiceLineAction : Entity<Guid>
 {
     public Guid ServiceActionId { get; set; }
     public required ServiceAction ServiceAction { get; set; }

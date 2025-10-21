@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Enums;
 
 namespace TeknikServis.Infrastructure.Context;
 
-public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>, IUnitOfWork
+public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid,
+    IdentityUserClaim<Guid>, AppUserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>, IUnitOfWork
 {
     public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
@@ -42,8 +44,27 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
 
             b.Property(u => u.RefreshTokenExpires);
         });
+        //ulke içe il mahalle
+        builder.Entity<Country>()
+       .HasMany(c => c.Provinces)
+       .WithOne(p => p.Country)
+       .HasForeignKey(p => p.CountryId)
+       .OnDelete(DeleteBehavior.Restrict);
 
-        // AppRole yapılandırması
+        builder.Entity<Province>()
+            .HasMany(p => p.Districts)
+            .WithOne(d => d.Province)
+            .HasForeignKey(d => d.ProvinceId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<District>()
+            .HasMany(d => d.Neighbourhoods)
+            .WithOne(n => n.District)
+            .HasForeignKey(n => n.DistrictId)
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<District>()
+            .HasIndex(d => d.PostalCode)
+            .IsUnique(false);
         builder.Entity<AppRole>(b =>
         {
             b.ToTable("AppRoles");
@@ -53,11 +74,23 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
                 .IsRequired();
         });
 
-        // IdentityUserRole yapılandırması
-        builder.Entity<IdentityUserRole<Guid>>(b =>
+        // AppUserRole (User-Role join) configuration
+        builder.Entity<AppUserRole>(b =>
         {
             b.ToTable("AppUserRoles");
             b.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+            b.HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasOne(ur => ur.Role)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         // Diğer Identity tabloları
@@ -70,11 +103,6 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
         builder.Entity<Customer>().OwnsOne(c => c.Address, a =>
         {
             a.Property(p => p.AddressLine).HasColumnName("AddressLine");
-            a.Property(p => p.City).HasColumnName("City");
-            a.Property(p => p.Neighborhood).HasColumnName("Neighborhood");
-            a.Property(p => p.District).HasColumnName("District");
-            a.Property(p => p.ZipCode).HasColumnName("ZipCode");
-            a.Property(p => p.Country).HasColumnName("Country");
         });
 
         // SmartEnum conversions

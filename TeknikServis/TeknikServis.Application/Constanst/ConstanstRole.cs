@@ -19,19 +19,22 @@ public static class ConstantsRole
             {
                 Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                 Name = RoleNames.Admin,
-                NormalizedName = RoleNames.Admin.ToUpperInvariant()
+                NormalizedName = RoleNames.Admin.ToUpperInvariant(),
+                UserRoles = new List<AppUserRole>()
             },
             new AppRole
             {
                 Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                Name = RoleNames.User, // PERSON USER TEK SEY DE ALDIK
-                NormalizedName = RoleNames.User.ToUpperInvariant()
+                Name = RoleNames.User, 
+                NormalizedName = RoleNames.User.ToUpperInvariant(),
+                UserRoles = new List<AppUserRole>()
             },
             new AppRole
             {
                 Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
                 Name = RoleNames.Customer,
-                NormalizedName = RoleNames.Customer.ToUpperInvariant()
+                NormalizedName = RoleNames.Customer.ToUpperInvariant(),
+                UserRoles = new List<AppUserRole>()
             }
         };
     }

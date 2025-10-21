@@ -12,8 +12,8 @@ using TeknikServis.Infrastructure.Context;
 namespace TeknikServis.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251002144349_mdf3434343assd8855678787TT3E343343434343443")]
-    partial class mdf3434343assd8855678787TT3E343343434343443
+    [Migration("20251021075550_mg347643764736437634122121212121321676")]
+    partial class mg347643764736437634122121212121321676
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,21 +92,6 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AppUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -243,6 +228,67 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.ToTable("AppUsers", (string)null);
                 });
 
+            modelBuilder.Entity("TeknikServis.Domain.Entities.AppUserRole", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AppUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateadAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("CreatedTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Nr")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("UpdatedTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Country");
+                });
+
             modelBuilder.Entity("TeknikServis.Domain.Entities.Customer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -282,6 +328,65 @@ namespace TeknikServis.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TcNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("UpdatedTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("VkNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.District", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateadAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("CreatedTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ProvinceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Ref")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -294,7 +399,11 @@ namespace TeknikServis.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.HasIndex("PostalCode");
+
+                    b.HasIndex("ProvinceId");
+
+                    b.ToTable("District");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.DocumentLink", b =>
@@ -342,6 +451,57 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.HasIndex("ServiceActionId");
 
                     b.ToTable("DocumentLinks");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Neighbourhood", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateadAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("CreatedTime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("DistrictId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Nr")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("UpdatedTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DistrictId");
+
+                    b.ToTable("Neighbourhood");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.Person", b =>
@@ -447,6 +607,57 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Province", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateadAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("CreatedTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ref")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly>("UpdatedTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("Province");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.ServiceAction", b =>
@@ -683,21 +894,6 @@ namespace TeknikServis.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.HasOne("TeknikServis.Domain.Entities.AppRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TeknikServis.Domain.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("TeknikServis.Domain.Entities.AppUser", null)
@@ -705,6 +901,25 @@ namespace TeknikServis.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.AppUserRole", b =>
+                {
+                    b.HasOne("TeknikServis.Domain.Entities.AppRole", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TeknikServis.Domain.Entities.AppUser", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.Customer", b =>
@@ -719,31 +934,6 @@ namespace TeknikServis.Infrastructure.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("AddressLine");
 
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("City");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Country");
-
-                            b1.Property<string>("District")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("District");
-
-                            b1.Property<string>("Neighborhood")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Neighborhood");
-
-                            b1.Property<string>("ZipCode")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ZipCode");
-
                             b1.HasKey("CustomerId");
 
                             b1.ToTable("Customers");
@@ -754,6 +944,17 @@ namespace TeknikServis.Infrastructure.Migrations
 
                     b.Navigation("Address")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.District", b =>
+                {
+                    b.HasOne("TeknikServis.Domain.Entities.Province", "Province")
+                        .WithMany("Districts")
+                        .HasForeignKey("ProvinceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Province");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.DocumentLink", b =>
@@ -767,6 +968,17 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.Navigation("ServiceAction");
                 });
 
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Neighbourhood", b =>
+                {
+                    b.HasOne("TeknikServis.Domain.Entities.District", "District")
+                        .WithMany("Neighbourhoods")
+                        .HasForeignKey("DistrictId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("District");
+                });
+
             modelBuilder.Entity("TeknikServis.Domain.Entities.Product", b =>
                 {
                     b.HasOne("TeknikServis.Domain.Entities.Customer", "Customer")
@@ -776,6 +988,17 @@ namespace TeknikServis.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Province", b =>
+                {
+                    b.HasOne("TeknikServis.Domain.Entities.Country", "Country")
+                        .WithMany("Provinces")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.ServiceAction", b =>
@@ -859,14 +1082,39 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.Navigation("ServiceAction");
                 });
 
+            modelBuilder.Entity("TeknikServis.Domain.Entities.AppRole", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.AppUser", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Country", b =>
+                {
+                    b.Navigation("Provinces");
+                });
+
             modelBuilder.Entity("TeknikServis.Domain.Entities.Customer", b =>
                 {
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("TeknikServis.Domain.Entities.District", b =>
+                {
+                    b.Navigation("Neighbourhoods");
+                });
+
             modelBuilder.Entity("TeknikServis.Domain.Entities.Person", b =>
                 {
                     b.Navigation("Actions");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Province", b =>
+                {
+                    b.Navigation("Districts");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.ServiceAction", b =>

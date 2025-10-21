@@ -20,7 +20,8 @@ public static class ExtensionsMiddleware
                     {
                         Id = role.Id,
                         Name = role.Name,
-                        NormalizedName = role.NormalizedName
+                        NormalizedName = role.NormalizedName,
+                        UserRoles = new List<AppUserRole>(),              
                     }).GetAwaiter().GetResult();
                 }
             }
@@ -34,7 +35,8 @@ public static class ExtensionsMiddleware
                     Email = "admin@admin.com",
                     FirstName = "Mudbey",
                     LastName = "Yazılım",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    UserRoles= new List<AppUserRole>()
                 };
 
                 var createResult = userManager.CreateAsync(user, "Mudbey123.").GetAwaiter().GetResult();

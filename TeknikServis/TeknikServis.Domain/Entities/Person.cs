@@ -3,7 +3,7 @@ using TeknikServis.Domain.Enums;
 
 namespace TeknikServis.Domain.Entities;
 
-public sealed class Person : Entity
+public sealed class Person : Entity<Guid>
 {
     public string Name { get; set; } = default!;
     public string LastName { get; set; } = default!;

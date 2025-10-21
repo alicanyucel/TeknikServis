@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TeknikServis.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class mdf3434343assd88556 : Migration
+    public partial class mg347643764736437634122121212121321 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,20 +56,39 @@ namespace TeknikServis.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Country",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nr = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    CreatedTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateadAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Country", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VkNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TcNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressLine = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CustomerType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UpdatedTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     CreatedTime = table.Column<TimeOnly>(type: "time", nullable: false),
@@ -231,6 +250,35 @@ namespace TeknikServis.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Province",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Code = table.Column<int>(type: "int", nullable: false),
+                    Ref = table.Column<int>(type: "int", nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    UpdatedTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    CreatedTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateadAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Province", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Province_Country_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Country",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -297,6 +345,36 @@ namespace TeknikServis.Infrastructure.Migrations
                         name: "FK_ServiceActions_Statuses_StatusId",
                         column: x => x.StatusId,
                         principalTable: "Statuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "District",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Ref = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostalCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProvinceId = table.Column<int>(type: "int", nullable: false),
+                    UpdatedTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    CreatedTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateadAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_District", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_District_Province_ProvinceId",
+                        column: x => x.ProvinceId,
+                        principalTable: "Province",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -410,6 +488,35 @@ namespace TeknikServis.Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Neighbourhood",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nr = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DistrictId = table.Column<int>(type: "int", nullable: false),
+                    UpdatedTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    CreatedTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateadAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Neighbourhood", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Neighbourhood_District_DistrictId",
+                        column: x => x.DistrictId,
+                        principalTable: "District",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AppRoles",
@@ -435,14 +542,34 @@ namespace TeknikServis.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_District_PostalCode",
+                table: "District",
+                column: "PostalCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_District_ProvinceId",
+                table: "District",
+                column: "ProvinceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DocumentLinks_ServiceActionId",
                 table: "DocumentLinks",
                 column: "ServiceActionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Neighbourhood_DistrictId",
+                table: "Neighbourhood",
+                column: "DistrictId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CustomerId",
                 table: "Products",
                 column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Province_CountryId",
+                table: "Province",
+                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
@@ -515,6 +642,9 @@ namespace TeknikServis.Infrastructure.Migrations
                 name: "DocumentLinks");
 
             migrationBuilder.DropTable(
+                name: "Neighbourhood");
+
+            migrationBuilder.DropTable(
                 name: "RoleClaims");
 
             migrationBuilder.DropTable(
@@ -533,6 +663,9 @@ namespace TeknikServis.Infrastructure.Migrations
                 name: "VideoLinks");
 
             migrationBuilder.DropTable(
+                name: "District");
+
+            migrationBuilder.DropTable(
                 name: "AppRoles");
 
             migrationBuilder.DropTable(
@@ -545,6 +678,9 @@ namespace TeknikServis.Infrastructure.Migrations
                 name: "ServiceActions");
 
             migrationBuilder.DropTable(
+                name: "Province");
+
+            migrationBuilder.DropTable(
                 name: "Customers");
 
             migrationBuilder.DropTable(
@@ -552,6 +688,9 @@ namespace TeknikServis.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Statuses");
+
+            migrationBuilder.DropTable(
+                name: "Country");
         }
     }
 }
