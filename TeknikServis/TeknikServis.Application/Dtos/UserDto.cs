@@ -5,7 +5,6 @@ public sealed record UserDto(
     string FirstName,
     string LastName,
     string Email,
-    string Password = "",
     IList<string> Roles = null!,
     TimeOnly UpdatedTime = default,
     string UpdatedBy = "",

@@ -1,11 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TeknikServis.Application.Features.Customers.CreateCustomer;
-using TeknikServis.Application.Features.Customers.CustomerGetById;
-using TeknikServis.Application.Features.Customers.DeleteCustomers;
-using TeknikServis.Application.Features.Customers.GetAllCustomers;
-using TeknikServis.Application.Features.Customers.UpdateCustomer;
 using TeknikServis.Application.Features.ServiceActions.CreateServiceActions;
 using TeknikServis.Application.Features.ServiceActions.DeleteServiceActions;
 using TeknikServis.Application.Features.ServiceActions.GetAllServiceActions;
