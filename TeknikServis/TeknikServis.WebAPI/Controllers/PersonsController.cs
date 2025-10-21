@@ -9,55 +9,56 @@ using TeknikServis.Application.Features.Persons.GetByIdPerson;
 using TeknikServis.Application.Features.Persons.UpdatePerson;
 using TeknikServis.WebAPI.Abstractions;
 
-namespace TeknikServis.WebAPI.Controllers;
-
 public class PersonsController : ApiController
 {
-
-    public PersonsController(IMediator mediator) : base(mediator)
-    {
-    }
+    public PersonsController(IMediator mediator) : base(mediator) { }
 
     [HttpPost]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User)]
-    public async Task<IActionResult> CreatePerson(CreatePersonCommand request, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(request, cancellationToken);
-        return NoContent();
-    }
-
-
-    [HttpPost]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User)]
-    public async Task<IActionResult> PersonGetById(GetPersonByIdQuery request, CancellationToken cancellationToken)
+    [Authorize(Roles = RoleNames.Admin)]
+    public async Task<IActionResult> CreatePersonel(CreatePersonCommand request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
-        return Ok(result);
-
-
-    }
-    [HttpPost]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User)]
-    public async Task<IActionResult> PersonDelete(DeletePersonCommand request, CancellationToken cancellationToken)
-    {
-        await _mediator.Send(request, cancellationToken);
-
-        return NoContent();
+        return result.IsSuccessful
+            ? Ok(new { message = "Personel başarıyla oluşturuldu.", personelId = result.Data })
+            : BadRequest(new { message = "Personel oluşturulamadı.", errors = result.ErrorMessages });
     }
 
     [HttpPost]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User)]
-    public async Task<IActionResult> GetAllPersons(GetAllPersonQuery request, CancellationToken cancellationToken)
+    [Authorize(Roles = RoleNames.Admin)]
+    public async Task<IActionResult> GetPersonelById(GetPersonByIdQuery request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
-    }
-    [HttpPost]
-    [Authorize(Roles = RoleNames.Admin + "," + RoleNames.User)]
-    public async Task<IActionResult> UpdatePerson(UpdatePersonCommand request, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+        var result = await _mediator.Send(request, cancellationToken);
+        return result != null
+            ? Ok(result)
+            : NotFound(new { message = "Personel bulunamadı." });
     }
 
+    [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
+    public async Task<IActionResult> DeletePersonel(DeletePersonCommand request, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Personel başarıyla silindi." })
+            : BadRequest(new { message = "Personel silinemedi.", errors = result.ErrorMessages });
+    }
+
+    [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
+    public async Task<IActionResult> GetAllPersonel(GetAllPersonQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(request, cancellationToken);
+        return Ok(new { message = "Personel listesi getirildi.", data = result });
+    }
+
+    [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
+    public async Task<IActionResult> UpdatePersonel(UpdatePersonCommand request, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Personel başarıyla güncellendi." })
+            : BadRequest(new { message = "Personel güncellenemedi.", errors = result.ErrorMessages });
+    }
 }
+

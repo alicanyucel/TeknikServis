@@ -32,10 +32,12 @@ public sealed class MappingProfile : Profile
         // Person ↔ Commands
         CreateMap<CreatePersonCommand, Person>()
             .ForMember(dest => dest.ExpertiseArea, opt => opt.MapFrom(src => ExpertiseArea.FromValue(src.ExpertiseArea)))
+            .ForMember(dest => dest.Actions, opt => opt.Ignore())
             .ReverseMap();
 
         CreateMap<UpdatePersonCommand, Person>()
             .ForMember(dest => dest.ExpertiseArea, opt => opt.MapFrom(src => ExpertiseArea.FromValue(src.ExpertiseArea)))
+            .ForMember(dest => dest.Actions, opt => opt.Ignore())
             .ReverseMap();
 
         // Product ↔ Commands

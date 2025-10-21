@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using TeknikServis.Domain.Enums;
 
 namespace TeknikServis.Application.Features.Persons.CreatePerson;
 
@@ -14,7 +15,9 @@ public sealed class CreatePersonCommandValidator : AbstractValidator<CreatePerso
             .NotEmpty().WithMessage("Soyad boş olamaz.")
             .MaximumLength(100);
 
+        // Validate ExpertiseArea value against defined SmartEnum values
         RuleFor(x => x.ExpertiseArea)
-            .IsInEnum().WithMessage("Geçersiz uzmanlık alanı.");
+            .Must(v => ExpertiseArea.List.Any(e => e.Value == v))
+            .WithMessage("Geçersiz uzmanlık alanı.");
     }
 }
