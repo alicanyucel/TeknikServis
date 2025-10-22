@@ -190,7 +190,7 @@ public class LocationSeeder
                     Name = districtName,
                     Code = ParseInt(r.ILCEKODU),
                     Ref = r.ILCEID ?? 0,
-                    PostalCode = r.POSTAKODU ?? string.Empty,
+                    PostalCode = r.POSTAKODU?.ToString() ?? string.Empty,
                     CreatedBy = "seeder",
                     UpdatedBy = "seeder",
                     CreateadAt = now,
@@ -227,7 +227,17 @@ public class LocationSeeder
         await _context.SaveChangesAsync(ct);
     }
 
-    private static int ParseInt(string? s) => int.TryParse(s, out var v) ? v : 0;
+    private static int ParseInt(object? s)
+    {
+        if (s == null) return 0;
+        if (s is int i) return i;
+        if (s is long l) return (int)l;
+        if (s is string str)
+        {
+            if (int.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out var v)) return v;
+        }
+        return 0;
+    }
 
     private async Task<int> EnsureCountryAsync(string countryName, CancellationToken ct)
     {
@@ -276,33 +286,14 @@ public class LocationSeeder
         [JsonPropertyName("ULKEKODU")] public string? ULKEKODU { get; set; }
         [JsonPropertyName("ULKE")] public string? ULKE { get; set; }
         [JsonPropertyName("SEHIRREF")] public int? SEHIRREF { get; set; }
-        [JsonPropertyName("SEHIRKODU"), JsonConverter(typeof(StringOrNumberConverter))] public string? SEHIRKODU { get; set; }
+        [JsonPropertyName("SEHIRKODU")] public object? SEHIRKODU { get; set; }
         [JsonPropertyName("SEHIRADI")] public string? SEHIRADI { get; set; }
         [JsonPropertyName("ILCEID")] public int? ILCEID { get; set; }
-        [JsonPropertyName("ILCEKODU"), JsonConverter(typeof(StringOrNumberConverter))] public string? ILCEKODU { get; set; }
+        [JsonPropertyName("ILCEKODU")] public object? ILCEKODU { get; set; }
         [JsonPropertyName("ILCEADI")] public string? ILCEADI { get; set; }
         [JsonPropertyName("MAHALLENR")] public int? MAHALLENR { get; set; }
-        [JsonPropertyName("MAHALLEKODU"), JsonConverter(typeof(StringOrNumberConverter))] public string? MAHALLEKODU { get; set; }
+        [JsonPropertyName("MAHALLEKODU")] public object? MAHALLEKODU { get; set; }
         [JsonPropertyName("MAHALLEADI")] public string? MAHALLEADI { get; set; }
-        [JsonPropertyName("POSTAKODU")] public string? POSTAKODU { get; set; }
-    }
-    private sealed class StringOrNumberConverter : JsonConverter<string?>
-    {
-        public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            return reader.TokenType switch
-            {
-                JsonTokenType.String => reader.GetString(),
-                JsonTokenType.Number => reader.TryGetInt64(out var i64) ? i64.ToString(CultureInfo.InvariantCulture) : reader.GetDouble().ToString(CultureInfo.InvariantCulture),
-                JsonTokenType.Null => null,
-                _ => throw new JsonException($"Unsupported token {reader.TokenType} for string")
-            };
-        }
-
-        public override void Write(Utf8JsonWriter writer, string? value, JsonSerializerOptions options)
-        {
-            if (value is null) writer.WriteNullValue();
-            else writer.WriteStringValue(value);
-        }
+        [JsonPropertyName("POSTAKODU")] public object? POSTAKODU { get; set; }
     }
 }
