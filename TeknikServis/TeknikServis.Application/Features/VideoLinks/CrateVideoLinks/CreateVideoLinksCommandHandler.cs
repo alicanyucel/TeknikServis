@@ -40,13 +40,9 @@ internal sealed class CreateVideoLinkComamndHandler(IVideoLinkRepository videoLi
 
             finalUrl = $"/videos/{uniqueFileName}";
         }
-        else if (!string.IsNullOrWhiteSpace(request.Url))
-        {
-            finalUrl = request.Url!.Trim();
-        }
         else
         {
-            return Result<string>.Failure("Video dosyası veya Url sağlanmalıdır.");
+            return Result<string>.Failure("Video dosyası sağlanmalıdır.");
         }
 
         var video = new VideoLink

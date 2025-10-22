@@ -46,11 +46,6 @@ internal sealed class UpdateVideoLinksCommandHandler(IVideoLinkRepository videoL
 
             videoLink.Url = $"/videos/{uniqueFileName}";
         }
-        else if (!string.IsNullOrWhiteSpace(request.Url))
-        {
-            videoLink.Url = request.Url!.Trim();
-        }
-
         videoLink.Description = request.Description;
         videoLink.ServiceActionId = request.ServiceActionId;
         videoLink.UpdatedTime = request.UpdatedTime;

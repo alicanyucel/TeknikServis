@@ -6,7 +6,6 @@ namespace TeknikServis.Application.Features.VideoLinks.CrateVideoLinks;
 
 public sealed record CreateVideoLinkCommand(
     IFormFile? File,
-    string? Url,
     string Description,
     Guid ServiceActionId,
     TimeOnly UpdatedTime,

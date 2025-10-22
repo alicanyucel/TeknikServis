@@ -7,7 +7,6 @@ namespace TeknikServis.Application.Features.VideoLinks.UpdateVideoLinks;
 public sealed record UpdateVideoLinkCommand(
     Guid Id,
     IFormFile? File,
-    string? Url,
     string Description,
     Guid ServiceActionId,
     TimeOnly UpdatedTime,
