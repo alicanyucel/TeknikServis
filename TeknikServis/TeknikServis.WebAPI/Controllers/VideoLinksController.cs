@@ -8,49 +8,58 @@ using TeknikServis.Application.Features.VideoLinks.GetByIdVideoLinks;
 using TeknikServis.Application.Features.VideoLinks.UpdateVideoLinks;
 using TeknikServis.WebAPI.Abstractions;
 
-
 namespace TeknikServis.WebAPI.Controllers;
 
 [AllowAnonymous]
+[Produces("application/json")]
 public class VideoLinksController : ApiController
 {
-    public VideoLinksController(IMediator mediator) : base(mediator)
-    {
-    }
-    [HttpPost]
-    public async Task<IActionResult> CreateVideoLinks(CreateVideoLinkCommand request, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(request, cancellationToken);
-        return NoContent();
-    }
+    public VideoLinksController(IMediator mediator) : base(mediator) { }
 
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> CreateVideoLinks([FromForm] CreateVideoLinkCommand request, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Video uploaded and saved successfully." })
+            : BadRequest(new { success = false, message = "Failed to create video link.", errors = result.ErrorMessages });
+    }
 
     [HttpPost]
     public async Task<IActionResult> VideoLinkGetById(GetVideoLinkByIdQuery request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
-        return Ok(result);
-
-
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Video link retrieved.", data = result.Data })
+            : NotFound(new { success = false, message = "Video link not found.", errors = result.ErrorMessages });
     }
+
     [HttpPost]
     public async Task<IActionResult> VideoLinkDelete(DeleteVideoLinkCommand request, CancellationToken cancellationToken)
     {
-        await _mediator.Send(request, cancellationToken);
-
-        return NoContent();
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Video link deleted." })
+            : BadRequest(new { success = false, message = "Failed to delete video link.", errors = result.ErrorMessages });
     }
 
     [HttpPost]
     public async Task<IActionResult> GetAllVideoLinks(GetAllVideoLinkQuery request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Video links listed.", data = result.Data })
+            : BadRequest(new { success = false, message = "Failed to list video links.", errors = result.ErrorMessages });
     }
+
     [HttpPost]
-    public async Task<IActionResult> UpdateVideoLinks(UpdateVideoLinkCommand request, CancellationToken cancellationToken)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> UpdateVideoLinks([FromForm] UpdateVideoLinkCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Video link updated." })
+            : BadRequest(new { success = false, message = "Failed to update video link.", errors = result.ErrorMessages });
     }
 }
