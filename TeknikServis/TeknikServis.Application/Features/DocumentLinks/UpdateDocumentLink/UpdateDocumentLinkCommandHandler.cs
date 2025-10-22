@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using GenericRepository;
+﻿using GenericRepository;
 using MediatR;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Repositories;
