@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Enums;
+using TeknikServis.Infrastructure.Converters;
 
 namespace TeknikServis.Infrastructure.Context;
 
@@ -118,9 +120,14 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
             .Property(c => c.CustomerType)
             .HasConversion(v => v.Name, v => CustomerType.FromName(v, false));
 
+        var productTypeConverter = new ValueConverter<ProductType, string>(
+            v => v.Name,
+            v => ProductTypeFromName(v)
+        );
+
         builder.Entity<Product>()
             .Property(p => p.ProductType)
-            .HasConversion(v => v.Name, v => ProductType.FromName(v, false));
+            .HasConversion(productTypeConverter);
 
         builder.Entity<Person>()
             .Property(p => p.ExpertiseArea)
@@ -195,5 +202,14 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
 
         // Apply configurations
         builder.ApplyConfigurationsFromAssembly(typeof(DependencyInjection).Assembly);
+    }
+
+    private static ProductType ProductTypeFromName(string name)
+    {
+        if (ProductType.TryFromName(name, true, out var pt))
+        {
+            return pt;
+        }
+        return ProductType.Accessory;
     }
 }
