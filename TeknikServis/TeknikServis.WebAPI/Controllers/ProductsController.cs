@@ -11,6 +11,7 @@ using TeknikServis.WebAPI.Abstractions;
 namespace TeknikServis.WebAPI.Controllers;
 
 [AllowAnonymous]
+[Produces("application/json")]
 public class ProductsController : ApiController
 {
     public ProductsController(IMediator mediator) : base(mediator)
@@ -19,8 +20,10 @@ public class ProductsController : ApiController
     [HttpPost]
     public async Task<IActionResult> CreateProduct(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return NoContent();
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Product created." })
+            : BadRequest(new { success = false, message = "Failed to create product.", errors = result.ErrorMessages });
     }
 
 
@@ -28,28 +31,36 @@ public class ProductsController : ApiController
     public async Task<IActionResult> ProductGetById(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
-        return Ok(result);
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Product retrieved.", data = result.Data })
+            : NotFound(new { success = false, message = "Product not found.", errors = result.ErrorMessages });
 
 
     }
     [HttpPost]
     public async Task<IActionResult> ProductDelete(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        await _mediator.Send(request, cancellationToken);
+        var result = await _mediator.Send(request, cancellationToken);
 
-        return NoContent();
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Product deleted." })
+            : BadRequest(new { success = false, message = "Failed to delete product.", errors = result.ErrorMessages });
     }
 
     [HttpPost]
     public async Task<IActionResult> GetAllProduct(GetAllProductQuery request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Products listed.", data = result.Data })
+            : BadRequest(new { success = false, message = "Failed to list products.", errors = result.ErrorMessages });
     }
     [HttpPost]
     public async Task<IActionResult> UpdateProduct(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Product updated." })
+            : BadRequest(new { success = false, message = "Failed to update product.", errors = result.ErrorMessages });
     }
 }

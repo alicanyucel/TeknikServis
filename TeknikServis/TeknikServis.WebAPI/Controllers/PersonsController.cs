@@ -9,6 +9,7 @@ using TeknikServis.Application.Features.Persons.GetByIdPerson;
 using TeknikServis.Application.Features.Persons.UpdatePerson;
 using TeknikServis.WebAPI.Abstractions;
 
+[Produces("application/json")]
 public class PersonsController : ApiController
 {
     public PersonsController(IMediator mediator) : base(mediator) { }
@@ -19,8 +20,8 @@ public class PersonsController : ApiController
     {
         var result = await _mediator.Send(request, cancellationToken);
         return result.IsSuccessful
-            ? Ok(new { message = "Personel başarıyla oluşturuldu.", personelId = result.Data })
-            : BadRequest(new { message = "Personel oluşturulamadı.", errors = result.ErrorMessages });
+            ? Ok(new { success = true, message = "Person created." })
+            : BadRequest(new { success = false, message = "Failed to create person.", errors = result.ErrorMessages });
     }
 
     [HttpPost]
@@ -28,9 +29,9 @@ public class PersonsController : ApiController
     public async Task<IActionResult> GetPersonelById(GetPersonByIdQuery request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
-        return result != null
-            ? Ok(result)
-            : NotFound(new { message = "Personel bulunamadı." });
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Person retrieved.", data = result.Data })
+            : NotFound(new { success = false, message = "Person not found.", errors = result.ErrorMessages });
     }
 
     [HttpPost]
@@ -39,8 +40,8 @@ public class PersonsController : ApiController
     {
         var result = await _mediator.Send(request, cancellationToken);
         return result.IsSuccessful
-            ? Ok(new { message = "Personel başarıyla silindi." })
-            : BadRequest(new { message = "Personel silinemedi.", errors = result.ErrorMessages });
+            ? Ok(new { success = true, message = "Person deleted." })
+            : BadRequest(new { success = false, message = "Failed to delete person.", errors = result.ErrorMessages });
     }
 
     [HttpPost]
@@ -48,7 +49,9 @@ public class PersonsController : ApiController
     public async Task<IActionResult> GetAllPersonel(GetAllPersonQuery request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
-        return Ok(new { message = "Personel listesi getirildi.", data = result });
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "People listed.", data = result.Data })
+            : BadRequest(new { success = false, message = "Failed to list people.", errors = result.ErrorMessages });
     }
 
     [HttpPost]
@@ -57,8 +60,8 @@ public class PersonsController : ApiController
     {
         var result = await _mediator.Send(request, cancellationToken);
         return result.IsSuccessful
-            ? Ok(new { message = "Personel başarıyla güncellendi." })
-            : BadRequest(new { message = "Personel güncellenemedi.", errors = result.ErrorMessages });
+            ? Ok(new { success = true, message = "Person updated." })
+            : BadRequest(new { success = false, message = "Failed to update person.", errors = result.ErrorMessages });
     }
 }
 

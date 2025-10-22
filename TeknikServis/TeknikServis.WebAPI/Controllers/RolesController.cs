@@ -8,6 +8,7 @@ using TeknikServis.WebAPI.Abstractions;
 namespace TeknikServis.WebAPI.Controllers;
 
 [AllowAnonymous]
+[Produces("application/json")]
 public class RolesController : ApiController
 {
     public RolesController(IMediator mediator) : base(mediator)
@@ -16,13 +17,15 @@ public class RolesController : ApiController
     [HttpPost]
     public async Task<IActionResult> CreateRole(CreateRoleCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return StatusCode(response.StatusCode, response);
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "Roles synced." })
+            : BadRequest(new { success = false, message = "Failed to sync roles.", errors = result.ErrorMessages });
     }
     [HttpPost]
     public async Task<IActionResult> GetAllRoles(GetAllRoleQuery request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+        var result = await _mediator.Send(request, cancellationToken);
+        return Ok(new { success = true, message = "Roles listed.", data = result });
     }
 }
