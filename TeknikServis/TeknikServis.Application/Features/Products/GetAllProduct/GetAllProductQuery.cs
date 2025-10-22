@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using TeknikServis.Domain.Entities;
+using TeknikServis.Application.Dtos;
 using TS.Result;
 
 namespace TeknikServis.Application.Features.Products.GetAllProduct;
 
-public sealed record GetAllProductQuery : IRequest<Result<List<Product>>>;
+public sealed record GetAllProductQuery : IRequest<Result<List<ProductDto>>>;
