@@ -1,10 +1,12 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using TS.Result;
 
 namespace TeknikServis.Application.Features.VideoLinks.CrateVideoLinks;
 
 public sealed record CreateVideoLinkCommand(
-    string Url,
+    IFormFile? File,
+    string? Url,
     string Description,
     Guid ServiceActionId,
     TimeOnly UpdatedTime,
