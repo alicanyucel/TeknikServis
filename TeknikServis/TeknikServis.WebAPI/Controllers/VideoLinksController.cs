@@ -20,8 +20,8 @@ public class VideoLinksController : ApiController
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateVideoLinks([FromForm] CreateVideoLinkCommand request, CancellationToken cancellationToken)
     {
-        if ((request.File is null || request.File.Length == 0) && string.IsNullOrWhiteSpace(request.Url))
-            return BadRequest(new { success = false, message = "A file or an external Url must be provided." });
+        if ((request.File is null || request.File.Length == 0))
+            return BadRequest(new { success = false, message = "A file must be provided." });
 
         var result = await _mediator.Send(request, cancellationToken);
         return result.IsSuccessful
