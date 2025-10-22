@@ -3,25 +3,29 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using TeknikServis.Application;
+using TeknikServis.Application.Features.LocationSenders;
 using TeknikServis.Infrastructure;
-using TeknikServis.WebAPI.Middlewares;
 using TeknikServis.WebAPI.JsonConverters;
-using System.Text.Json.Serialization;
-//
+using TeknikServis.WebAPI.Middlewares;
+using TeknikServis.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore; // add this
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDefaultCors();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Map ApplicationDbContext as DbContext so LocationSeeder(DbContext) can resolve
+builder.Services.AddScoped<DbContext, ApplicationDbContext>();
+
 builder.Services.AddMemoryCache();
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {
     opts.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
-    // Prevent JSON reference cycles between navigation properties
     opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    // Optional: increase depth if needed
     opts.JsonSerializerOptions.MaxDepth = 64;
 });
 builder.Services.AddEndpointsApiExplorer();
@@ -38,6 +42,7 @@ builder.Services.AddRateLimiter(options =>
         cfg.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
 });
+builder.Services.AddScoped<LocationSeeder>();
 
 builder.Services.AddSwaggerGen(setup =>
 {
@@ -71,7 +76,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "TeknikServisApi Mudbey Yazilým v2");
-        c.RoutePrefix = "swagger"; 
+        c.RoutePrefix = "swagger";
     });
 }
 

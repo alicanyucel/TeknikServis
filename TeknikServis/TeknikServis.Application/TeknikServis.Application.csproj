@@ -25,7 +25,6 @@
   <ItemGroup>
     <Folder Include="Features\Districts\" />
     <Folder Include="Features\Neighbourhoods\" />
-    <Folder Include="Features\NewFolder\" />
     <Folder Include="Features\Provinces\" />
   </ItemGroup>
 

@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Enums;
-using TeknikServis.Infrastructure.Converters;
 
 namespace TeknikServis.Infrastructure.Context;
 
