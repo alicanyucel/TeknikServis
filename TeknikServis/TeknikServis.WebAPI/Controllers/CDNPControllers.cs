@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using TeknikServis.WebAPI.Abstractions;
 
 namespace TeknikServis.WebAPI.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class CDNPControllers : ControllerBase
+[AllowAnonymous]
+public class CDNPControllers : ApiController
 {
+    public CDNPControllers(IMediator mediator) : base(mediator)
+    {
+    }
 }
