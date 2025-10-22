@@ -6,7 +6,6 @@ public sealed class DocumentLink : Entity<Guid>
 {
     public string Url { get; set; } = default!;
     public string Description { get; set; } = default!;
-
     public Guid ServiceActionId { get; set; }
     public required ServiceAction ServiceAction { get; set; }
 }

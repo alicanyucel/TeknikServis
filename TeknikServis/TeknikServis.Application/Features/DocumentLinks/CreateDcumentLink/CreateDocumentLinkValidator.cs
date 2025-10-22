@@ -6,11 +6,7 @@ public sealed class CreateDocumentLinkCommandValidator : AbstractValidator<Creat
 {
     public CreateDocumentLinkCommandValidator()
     {
-        RuleFor(x => x.Url)
-            .NotEmpty().WithMessage("URL boş olamaz.")
-            .Must(url => Uri.IsWellFormedUriString(url, UriKind.Absolute))
-            .WithMessage("Geçerli bir URL giriniz.");
-
+       
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("Açıklama boş olamaz.")
             .MaximumLength(500).WithMessage("Açıklama en fazla 500 karakter olabilir.");

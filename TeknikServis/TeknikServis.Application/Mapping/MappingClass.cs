@@ -48,7 +48,10 @@ public sealed class MappingProfile : Profile
         CreateMap<UpdateProductCommand, Product>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => ProductType.FromValue(src.ProductType)))
             .ReverseMap();
-
+        // DocumentLinkdto
+        CreateMap<DocumentLink, DocumentLinkUploadDto>().ReverseMap();
+        //videolkn vedolink to
+        CreateMap<VideoLink, VideoLinkUploadDto>().ReverseMap();
         // Status ↔ Commands
         CreateMap<CreateStatusCommand, Status>()
             .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
@@ -79,7 +82,6 @@ public sealed class MappingProfile : Profile
 
         // DocumentLink ↔ Commands
         CreateMap<CreateDocumentLinkCommand, DocumentLink>()
-            .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Url))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.ServiceActionId, opt => opt.MapFrom(src => src.ServiceActionId));
 

@@ -1,10 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using TS.Result;
 
 namespace TeknikServis.Application.Features.DocumentLinks.CreateDcumentLink;
 
 public sealed record CreateDocumentLinkCommand(
-string Url,
+IFormFile File,
 string Description,
 Guid ServiceActionId,
 TimeOnly UpdatedTime,

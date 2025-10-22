@@ -16,11 +16,18 @@ public class DocumentLinksController : ApiController
     public DocumentLinksController(IMediator mediator) : base(mediator)
     {
     }
+
     [HttpPost]
-    public async Task<IActionResult> CreateDocumentLink(CreateDocumentLinkCommand request, CancellationToken cancellationToken)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> CreateDocumentLink([FromForm] CreateDocumentLinkCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return NoContent();
+        if (request.File is null || request.File.Length == 0)
+            return BadRequest("Dosya seçilmedi.");
+
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { message = "Döküman kaydı yapıldı." })
+            : BadRequest(new { message = "Döküman kaydı başarısız.", errors = result.ErrorMessages });
     }
 
     [HttpPost]
@@ -28,14 +35,12 @@ public class DocumentLinksController : ApiController
     {
         var result = await _mediator.Send(request, cancellationToken);
         return Ok(result);
-
-
     }
+
     [HttpPost]
     public async Task<IActionResult> DocumentLinkDelete(DeleteDocumentLinkCommand request, CancellationToken cancellationToken)
     {
         await _mediator.Send(request, cancellationToken);
-
         return NoContent();
     }
 
@@ -45,8 +50,10 @@ public class DocumentLinksController : ApiController
         var response = await _mediator.Send(request, cancellationToken);
         return Ok(response);
     }
+
     [HttpPost]
-    public async Task<IActionResult> UpdateDocumentLink(UpdateDocumentLinkCommand request, CancellationToken cancellationToken)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> UpdateDocumentLink([FromForm] UpdateDocumentLinkCommand request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
         return Ok(response);
