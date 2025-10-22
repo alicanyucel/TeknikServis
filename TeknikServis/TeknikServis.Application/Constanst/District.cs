@@ -1,46 +1,46 @@
 ﻿using TeknikServis.Domain.Entities;
 
-namespace TeknikServis.Application.Constanst
+namespace TeknikServis.Application.Constanst;
+
+public static class DistrictConstants
 {
-    public static class DistrictConstants
-    {
-        public static readonly IReadOnlyList<District> Districts = new List<District>
-    {
-        new District { Id = 1, Code = 101, Ref = 1, Name = "Seyhan", PostalCode = "01000", ProvinceId = 1 },
-        new District { Id = 2, Code = 102, Ref = 2, Name = "Yüreğir", PostalCode = "01260", ProvinceId = 1 },
-        new District { Id = 3, Code = 103, Ref = 3, Name = "Çukurova", PostalCode = "01170", ProvinceId = 1 },
-        new District { Id = 4, Code = 104, Ref = 4, Name = "Sarıçam", PostalCode = "01360", ProvinceId = 1 },
-        new District { Id = 5, Code = 105, Ref = 5, Name = "Karaisalı", PostalCode = "01770", ProvinceId = 1 },
-        new District { Id = 6, Code = 106, Ref = 6, Name = "Ceyhan", PostalCode = "01940", ProvinceId = 1 },
-        new District { Id = 7, Code = 107, Ref = 7, Name = "İmamoğlu", PostalCode = "01700", ProvinceId = 1 },
-        new District { Id = 8, Code = 108, Ref = 8, Name = "Pozantı", PostalCode = "01470", ProvinceId = 1 },
-        new District { Id = 9, Code = 109, Ref = 9, Name = "Tufanbeyli", PostalCode = "01800", ProvinceId = 1 },
-        new District { Id = 10, Code = 110, Ref = 10, Name = "Yumurtalık", PostalCode = "01960", ProvinceId = 1 },
+    public static readonly IReadOnlyList<District> Districts = new List<District>
+{
+    new District { Id = 1, Code = 101, Ref = 1, Name = "Seyhan", PostalCode = "01000", ProvinceId = 1 },
+    new District { Id = 2, Code = 102, Ref = 2, Name = "Yüreğir", PostalCode = "01260", ProvinceId = 1 },
+    new District { Id = 3, Code = 103, Ref = 3, Name = "Çukurova", PostalCode = "01170", ProvinceId = 1 },
+    new District { Id = 4, Code = 104, Ref = 4, Name = "Sarıçam", PostalCode = "01360", ProvinceId = 1 },
+    new District { Id = 5, Code = 105, Ref = 5, Name = "Karaisalı", PostalCode = "01770", ProvinceId = 1 },
+    new District { Id = 6, Code = 106, Ref = 6, Name = "Ceyhan", PostalCode = "01940", ProvinceId = 1 },
+    new District { Id = 7, Code = 107, Ref = 7, Name = "İmamoğlu", PostalCode = "01700", ProvinceId = 1 },
+    new District { Id = 8, Code = 108, Ref = 8, Name = "Pozantı", PostalCode = "01470", ProvinceId = 1 },
+    new District { Id = 9, Code = 109, Ref = 9, Name = "Tufanbeyli", PostalCode = "01800", ProvinceId = 1 },
+    new District { Id = 10, Code = 110, Ref = 10, Name = "Yumurtalık", PostalCode = "01960", ProvinceId = 1 },
 
-        new District { Id = 11, Code = 201, Ref = 11, Name = "Merkez", PostalCode = "02000", ProvinceId = 2 },
-        new District { Id = 12, Code = 202, Ref = 12, Name = "Kahta", PostalCode = "02400", ProvinceId = 2 },
-        new District { Id = 13, Code = 203, Ref = 13, Name = "Besni", PostalCode = "02300", ProvinceId = 2 },
-        new District { Id = 14, Code = 204, Ref = 14, Name = "Gerger", PostalCode = "02600", ProvinceId = 2 },
-        new District { Id = 15, Code = 205, Ref = 15, Name = "Gölbaşı", PostalCode = "02260", ProvinceId = 2 },
-        new District { Id = 16, Code = 206, Ref = 16, Name = "Samsat", PostalCode = "02800", ProvinceId = 2 },
-        new District { Id = 17, Code = 207, Ref = 17, Name = "Sincik", PostalCode = "02700", ProvinceId = 2 },
-        new District { Id = 18, Code = 208, Ref = 18, Name = "Tut", PostalCode = "02500", ProvinceId = 2 },
+    new District { Id = 11, Code = 201, Ref = 11, Name = "Merkez", PostalCode = "02000", ProvinceId = 2 },
+    new District { Id = 12, Code = 202, Ref = 12, Name = "Kahta", PostalCode = "02400", ProvinceId = 2 },
+    new District { Id = 13, Code = 203, Ref = 13, Name = "Besni", PostalCode = "02300", ProvinceId = 2 },
+    new District { Id = 14, Code = 204, Ref = 14, Name = "Gerger", PostalCode = "02600", ProvinceId = 2 },
+    new District { Id = 15, Code = 205, Ref = 15, Name = "Gölbaşı", PostalCode = "02260", ProvinceId = 2 },
+    new District { Id = 16, Code = 206, Ref = 16, Name = "Samsat", PostalCode = "02800", ProvinceId = 2 },
+    new District { Id = 17, Code = 207, Ref = 17, Name = "Sincik", PostalCode = "02700", ProvinceId = 2 },
+    new District { Id = 18, Code = 208, Ref = 18, Name = "Tut", PostalCode = "02500", ProvinceId = 2 },
 
-        new District { Id = 19, Code = 301, Ref = 19, Name = "Merkez", PostalCode = "03000", ProvinceId = 3 },
-        new District { Id = 20, Code = 302, Ref = 20, Name = "Bolvadin", PostalCode = "03300", ProvinceId = 3 },
-        new District { Id = 21, Code = 303, Ref = 21, Name = "Çay", PostalCode = "03700", ProvinceId = 3 },
-        new District { Id = 22, Code = 304, Ref = 22, Name = "Dinar", PostalCode = "03500", ProvinceId = 3 },
-        new District { Id = 23, Code = 305, Ref = 23, Name = "Emirdağ", PostalCode = "03600", ProvinceId = 3 },
-        new District { Id = 24, Code = 306, Ref = 24, Name = "İhsaniye", PostalCode = "03400", ProvinceId = 3 },
-        new District { Id = 25, Code = 307, Ref = 25, Name = "Sandıklı", PostalCode = "03800", ProvinceId = 3 },
-        new District { Id = 26, Code = 308, Ref = 26, Name = "Sinanpaşa", PostalCode = "03100", ProvinceId = 3 },
-        new District { Id = 27, Code = 309, Ref = 27, Name = "Sultandağı", PostalCode = "03900", ProvinceId = 3 },
-        new District { Id = 28, Code = 310, Ref = 28, Name = "Başmakçı", PostalCode = "03200", ProvinceId = 3 },
-        new District { Id = 29, Code = 311, Ref = 29, Name = "Bayat", PostalCode = "03170", ProvinceId = 3 },
-        new District { Id = 30, Code = 312, Ref = 30, Name = "Hocalar", PostalCode = "03870", ProvinceId = 3 },
-        new District { Id = 31, Code = 313, Ref = 31, Name = "İscehisar", PostalCode = "03570", ProvinceId = 3 },
-        new District { Id = 32, Code = 314, Ref = 32, Name = "Kızılören", PostalCode = "03890", ProvinceId = 3 },
-        new District { Id = 33, Code = 401, Ref = 33, Name = "Merkez", PostalCode = "04000", ProvinceId = 4 },
+    new District { Id = 19, Code = 301, Ref = 19, Name = "Merkez", PostalCode = "03000", ProvinceId = 3 },
+    new District { Id = 20, Code = 302, Ref = 20, Name = "Bolvadin", PostalCode = "03300", ProvinceId = 3 },
+    new District { Id = 21, Code = 303, Ref = 21, Name = "Çay", PostalCode = "03700", ProvinceId = 3 },
+    new District { Id = 22, Code = 304, Ref = 22, Name = "Dinar", PostalCode = "03500", ProvinceId = 3 },
+    new District { Id = 23, Code = 305, Ref = 23, Name = "Emirdağ", PostalCode = "03600", ProvinceId = 3 },
+    new District { Id = 24, Code = 306, Ref = 24, Name = "İhsaniye", PostalCode = "03400", ProvinceId = 3 },
+    new District { Id = 25, Code = 307, Ref = 25, Name = "Sandıklı", PostalCode = "03800", ProvinceId = 3 },
+    new District { Id = 26, Code = 308, Ref = 26, Name = "Sinanpaşa", PostalCode = "03100", ProvinceId = 3 },
+    new District { Id = 27, Code = 309, Ref = 27, Name = "Sultandağı", PostalCode = "03900", ProvinceId = 3 },
+    new District { Id = 28, Code = 310, Ref = 28, Name = "Başmakçı", PostalCode = "03200", ProvinceId = 3 },
+    new District { Id = 29, Code = 311, Ref = 29, Name = "Bayat", PostalCode = "03170", ProvinceId = 3 },
+    new District { Id = 30, Code = 312, Ref = 30, Name = "Hocalar", PostalCode = "03870", ProvinceId = 3 },
+    new District { Id = 31, Code = 313, Ref = 31, Name = "İscehisar", PostalCode = "03570", ProvinceId = 3 },
+    new District { Id = 32, Code = 314, Ref = 32, Name = "Kızılören", PostalCode = "03890", ProvinceId = 3 },
+    new District { Id = 33, Code = 401, Ref = 33, Name = "Merkez", PostalCode = "04000", ProvinceId = 4 },
 new District { Id = 34, Code = 402, Ref = 34, Name = "Diyadin", PostalCode = "04900", ProvinceId = 4 },
 new District { Id = 35, Code = 403, Ref = 35, Name = "Doğubayazıt", PostalCode = "04400", ProvinceId = 4 },
 new District { Id = 36, Code = 404, Ref = 36, Name = "Eleşkirt", PostalCode = "04500", ProvinceId = 4 },
@@ -524,7 +524,5 @@ new District { Id = 459, Code = 3608, Ref = 459, Name = "Susuz", PostalCode = "3
 
 
 
-    };
-    }
-
+};
 }
