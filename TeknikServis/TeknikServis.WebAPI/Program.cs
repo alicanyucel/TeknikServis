@@ -8,6 +8,7 @@ using TeknikServis.Application;
 using TeknikServis.Infrastructure;
 using TeknikServis.WebAPI.Middlewares;
 using TeknikServis.WebAPI.JsonConverters;
+using System.Text.Json.Serialization;
 //
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDefaultCors();
@@ -18,6 +19,10 @@ builder.Services.AddMemoryCache();
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {
     opts.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+    // Prevent JSON reference cycles between navigation properties
+    opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    // Optional: increase depth if needed
+    opts.JsonSerializerOptions.MaxDepth = 64;
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddProblemDetails();
