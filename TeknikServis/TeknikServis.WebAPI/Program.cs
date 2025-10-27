@@ -6,7 +6,6 @@ using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using TeknikServis.Application;
-using TeknikServis.Application.Features.LocationSenders;
 using TeknikServis.Infrastructure;
 using TeknikServis.WebAPI.JsonConverters;
 using TeknikServis.WebAPI.Middlewares;
@@ -42,7 +41,6 @@ builder.Services.AddRateLimiter(options =>
         cfg.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
 });
-builder.Services.AddScoped<LocationSeeder>();
 
 builder.Services.AddSwaggerGen(setup =>
 {

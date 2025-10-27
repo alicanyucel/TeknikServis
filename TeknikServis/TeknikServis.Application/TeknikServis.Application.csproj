@@ -28,8 +28,4 @@
     <Folder Include="Features\Provinces\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="Constanst\DistrictConstant.cs" />
-  </ItemGroup>
-
 </Project>

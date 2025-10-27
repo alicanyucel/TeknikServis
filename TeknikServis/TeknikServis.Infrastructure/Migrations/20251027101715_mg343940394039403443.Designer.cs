@@ -12,8 +12,8 @@ using TeknikServis.Infrastructure.Context;
 namespace TeknikServis.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251021084525_mg3476437647364")]
-    partial class mg3476437647364
+    [Migration("20251027101715_mg343940394039403443")]
+    partial class mg343940394039403443
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -375,9 +375,6 @@ namespace TeknikServis.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreateadAt")
                         .HasColumnType("datetime2");
 
@@ -400,9 +397,6 @@ namespace TeknikServis.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ProvinceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Ref")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -479,9 +473,6 @@ namespace TeknikServis.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreateadAt")
                         .HasColumnType("datetime2");
 
@@ -501,9 +492,6 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Nr")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -635,9 +623,6 @@ namespace TeknikServis.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
-
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
@@ -657,9 +642,6 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Ref")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -823,6 +805,9 @@ namespace TeknikServis.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -834,6 +819,8 @@ namespace TeknikServis.Infrastructure.Migrations
                         .HasColumnType("time");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Statuses");
                 });
@@ -1089,6 +1076,16 @@ namespace TeknikServis.Infrastructure.Migrations
                     b.Navigation("Status");
                 });
 
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Status", b =>
+                {
+                    b.HasOne("TeknikServis.Domain.Entities.Product", "Product")
+                        .WithMany("StatusHistory")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("TeknikServis.Domain.Entities.VideoLink", b =>
                 {
                     b.HasOne("TeknikServis.Domain.Entities.ServiceAction", "ServiceAction")
@@ -1128,6 +1125,11 @@ namespace TeknikServis.Infrastructure.Migrations
             modelBuilder.Entity("TeknikServis.Domain.Entities.Person", b =>
                 {
                     b.Navigation("Actions");
+                });
+
+            modelBuilder.Entity("TeknikServis.Domain.Entities.Product", b =>
+                {
+                    b.Navigation("StatusHistory");
                 });
 
             modelBuilder.Entity("TeknikServis.Domain.Entities.Province", b =>

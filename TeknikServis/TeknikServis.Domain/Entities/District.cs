@@ -4,8 +4,7 @@ namespace TeknikServis.Domain.Entities;
 
 public class District : Entity<int>
 {
-    public int Ref { get; set; }
-    public int Code { get; set; }
+  
     public string Name { get; set; } = default!;
     public string PostalCode { get; set; } = default!;
     public int ProvinceId { get; set; }
