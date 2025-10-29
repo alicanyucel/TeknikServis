@@ -2,13 +2,9 @@
 
 namespace TeknikServis.Domain.Entities;
 
-public class District : Entity<int>
+public sealed class District : Entity<int>
 {
-  
-    public string Name { get; set; } = default!;
-    public string PostalCode { get; set; } = default!;
+    public string Name { get; set; } = null!;
     public int ProvinceId { get; set; }
-    public Province Province { get; set; } = default!;
-    public ICollection<Neighbourhood> Neighbourhoods { get; set; } = new List<Neighbourhood>();
+    public Province Province { get; set; } = null!;
 }
-

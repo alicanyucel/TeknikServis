@@ -2,10 +2,9 @@
 
 namespace TeknikServis.Domain.Entities;
 
-public class Country : Entity<int>
+public sealed class Country : Entity<int>
 {
-  
-    public string Name { get; set; } = default!;
-    public ICollection<Province> Provinces { get; set; } = new List<Province>();
+    public string Name { get; set; } = null!;
+    public string? Code { get; set; }
+    public ICollection<Province> Provinces { get; } = new List<Province>();
 }
-
