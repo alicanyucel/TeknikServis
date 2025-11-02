@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GenericRepository;
+using TeknikServis.Domain.Entities;
 
-namespace TeknikServis.Domain.Repositories
+namespace TeknikServis.Domain.Repositories;
+
+public interface IDistrictRepository : IRepository<District>
 {
-    internal class IDistrictRepository
-    {
-    }
 }
