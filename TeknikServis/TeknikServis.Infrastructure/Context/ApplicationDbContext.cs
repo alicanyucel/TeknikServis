@@ -15,7 +15,6 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     public DbSet<Country> Countries => Set<Country>();
     public DbSet<Province> Provinces => Set<Province>();
     public DbSet<District> Districts => Set<District>();
-    public DbSet<Neighbourhood> Neighbourhoods => Set<Neighbourhood>();
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Person> Persons => Set<Person>();
@@ -60,14 +59,6 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
             .HasForeignKey(d => d.ProvinceId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Entity<District>()
-            .HasMany(d => d.Neighbourhoods)
-            .WithOne(n => n.District)
-            .HasForeignKey(n => n.DistrictId)
-            .OnDelete(DeleteBehavior.Restrict);
-        builder.Entity<District>()
-            .HasIndex(d => d.PostalCode)
-            .IsUnique(false);
         builder.Entity<AppRole>(b =>
         {
             b.ToTable("AppRoles");

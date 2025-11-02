@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Districts\GetAllDistrict\" />
-    <Folder Include="Features\Districts\SetDistrict\" />
   </ItemGroup>
 
 </Project>

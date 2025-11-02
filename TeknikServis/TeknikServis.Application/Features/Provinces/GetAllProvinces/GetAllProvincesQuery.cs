@@ -1,5 +1,7 @@
-﻿namespace TeknikServis.Application.Features.Provinces.GetAllProvinces;
+﻿using MediatR;
+using TeknikServis.Application.Dtos;
+using TS.Result;
 
-internal class GetAllProvincesQuery
-{
-}
+namespace TeknikServis.Application.Features.Provinces.GetAllProvinces;
+
+public sealed record GetAllProvincesQuery : IRequest<Result<List<ProvinceListDto>>>;
