@@ -13,6 +13,7 @@ public class CountriesController : ApiController
     public CountriesController(IMediator mediator) : base(mediator)
     {
     }
+
     [HttpPost]
     public async Task<IActionResult> SetCountry(SetCountryCommand request, CancellationToken cancellationToken)
     {
@@ -21,10 +22,11 @@ public class CountriesController : ApiController
             ? Ok(new { success = true, message = "ülkeler eklendi" })
             : BadRequest(new { success = false, message = "Ülkeler eklenemedi", errors = result.ErrorMessages });
     }
-    [HttpPost]
-    public async Task<IActionResult> GetAllCountries(GetAllCountriesQuery request, CancellationToken cancellationToken)
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllCountries(CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(request, cancellationToken);
-        return Ok(new { success = true, message = "Ülkeler listelendi.", data = result });
+        var result = await _mediator.Send(new GetAllCountriesQuery(), cancellationToken);
+        return result.IsSuccessful ? Ok(result.Data) : BadRequest(result.ErrorMessages);
     }
 }

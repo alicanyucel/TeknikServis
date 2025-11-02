@@ -13,6 +13,7 @@ public class DistrictsController : ApiController
     public DistrictsController(IMediator mediator) : base(mediator)
     {
     }
+
     [HttpPost]
     public async Task<IActionResult> SetDistrict(SetDistrictCommand request, CancellationToken cancellationToken)
     {
@@ -21,10 +22,13 @@ public class DistrictsController : ApiController
             ? Ok(new { success = true, message = "İlçe eklendi." })
             : BadRequest(new { success = false, message = "İlçe eklenemedi", errors = result.ErrorMessages });
     }
-    [HttpPost]
-    public async Task<IActionResult> GetAllDistricts(GetAllDistrictsQuery request, CancellationToken cancellationToken)
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllDistricts([FromQuery] int? provinceId, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(request, cancellationToken);
-        return Ok(new { success = true, message = "İlçeler listelendi.", data = result });
+        var result = await _mediator.Send(new GetAllDistrictsQuery(provinceId), cancellationToken);
+        return result.IsSuccessful
+            ? Ok(new { success = true, message = "İlçeler listelendi.", data = result.Data })
+            : BadRequest(new { success = false, message = "İlçeler listelenemedi", errors = result.ErrorMessages });
     }
 }
