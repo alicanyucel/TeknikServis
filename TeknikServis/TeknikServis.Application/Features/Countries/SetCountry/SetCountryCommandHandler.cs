@@ -1,5 +1,6 @@
 using GenericRepository;
 using MediatR;
+using TeknikServis.Application.Constanst;
 using TeknikServis.Domain.Entities;
 using TeknikServis.Domain.Repositories;
 using TS.Result;
@@ -11,31 +12,40 @@ internal sealed class SetCountryCommandHandler(ICountryRepository countryReposit
 {
     public async Task<Result<string>> Handle(SetCountryCommand request, CancellationToken cancellationToken)
     {
-        var country = await countryRepository.GetByExpressionWithTrackingAsync(x => x.Id == request.Id, cancellationToken);
-        if (country is null)
+        // Sabitlerden (þimdilik sadece Türkiye) senkronize et
+        var items = new List<Country>
         {
-            country = new Country
+            new Country
             {
-                Id = request.Id,
-                Name = request.Name,
-                Code = request.Code,
+                Id = CountryConstants.Türkiye.Id,
+                Name = CountryConstants.Türkiye.Name,
+                Code = CountryConstants.Türkiye.Code,
                 CreatedBy = "system",
                 UpdatedBy = "system",
                 CreateadAt = DateTime.UtcNow,
                 CreatedTime = new TimeOnly(0, 0),
                 UpdatedTime = new TimeOnly(0, 0)
-            };
-            await countryRepository.AddAsync(country, cancellationToken);
-        }
-        else
+            }
+        };
+
+        foreach (var item in items)
         {
-            country.Name = request.Name;
-            country.Code = request.Code;
-            country.UpdatedBy = "system";
-            country.UpdatedTime = new TimeOnly(0, 0);
-            countryRepository.Update(country);
+            var existing = await countryRepository.GetByExpressionWithTrackingAsync(x => x.Id == item.Id, cancellationToken);
+            if (existing is null)
+            {
+                await countryRepository.AddAsync(item, cancellationToken);
+            }
+            else
+            {
+                existing.Name = item.Name;
+                existing.Code = item.Code;
+                existing.UpdatedBy = "system";
+                existing.UpdatedTime = new TimeOnly(0, 0);
+                countryRepository.Update(existing);
+            }
         }
+
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        return Result<string>.Succeed("Country set edildi");
+        return Result<string>.Succeed("Countries senkronize edildi");
     }
 }
