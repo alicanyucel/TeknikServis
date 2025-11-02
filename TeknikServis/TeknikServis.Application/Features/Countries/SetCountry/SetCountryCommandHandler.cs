@@ -13,32 +13,31 @@ internal sealed class SetCountryCommandHandler(ICountryRepository countryReposit
     public async Task<Result<string>> Handle(SetCountryCommand request, CancellationToken cancellationToken)
     {
         // Sabitlerden (þimdilik sadece Türkiye) senkronize et
-        var items = new List<Country>
+        var items = new List<(string Name, string? Code)>
         {
-            new Country
-            {
-                Id = CountryConstants.Türkiye.Id,
-                Name = CountryConstants.Türkiye.Name,
-                Code = CountryConstants.Türkiye.Code,
-                CreatedBy = "system",
-                UpdatedBy = "system",
-                CreateadAt = DateTime.UtcNow,
-                CreatedTime = new TimeOnly(0, 0),
-                UpdatedTime = new TimeOnly(0, 0)
-            }
+            (CountryConstants.Türkiye.Name, CountryConstants.Türkiye.Code)
         };
 
-        foreach (var item in items)
+        foreach (var (name, code) in items)
         {
-            var existing = await countryRepository.GetByExpressionWithTrackingAsync(x => x.Id == item.Id, cancellationToken);
+            var existing = await countryRepository.GetByExpressionWithTrackingAsync(x => x.Name == name, cancellationToken);
             if (existing is null)
             {
-                await countryRepository.AddAsync(item, cancellationToken);
+                var entity = new Country
+                {
+                    Name = name,
+                    Code = code,
+                    CreatedBy = "system",
+                    UpdatedBy = "system",
+                    CreateadAt = DateTime.UtcNow,
+                    CreatedTime = new TimeOnly(0, 0),
+                    UpdatedTime = new TimeOnly(0, 0)
+                };
+                await countryRepository.AddAsync(entity, cancellationToken);
             }
             else
             {
-                existing.Name = item.Name;
-                existing.Code = item.Code;
+                existing.Code = code;
                 existing.UpdatedBy = "system";
                 existing.UpdatedTime = new TimeOnly(0, 0);
                 countryRepository.Update(existing);

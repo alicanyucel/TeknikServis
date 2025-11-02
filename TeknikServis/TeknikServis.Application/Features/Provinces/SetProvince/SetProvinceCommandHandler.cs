@@ -7,37 +7,51 @@ using TS.Result;
 
 namespace TeknikServis.Application.Features.Provinces.SetProvince;
 
-internal sealed class SetProvinceCommandHandler(IProvinceRepository provinceRepository, IUnitOfWork unitOfWork)
+internal sealed class SetProvinceCommandHandler(IProvinceRepository provinceRepository, ICountryRepository countryRepository, IUnitOfWork unitOfWork)
     : IRequestHandler<SetProvinceCommand, Result<string>>
 {
     public async Task<Result<string>> Handle(SetProvinceCommand request, CancellationToken cancellationToken)
     {
-        // ProvinceConstant üzerinden senkronizasyon (81 il)
-        var provinces = ProvinceConstant.Provinces
-            .Select((name, index) => new Province
+        // Ülkeyi (Türkiye) garanti altına al ve Id'sini al
+        var country = await countryRepository.GetByExpressionWithTrackingAsync(c => c.Name == CountryConstants.Türkiye.Name, cancellationToken);
+        if (country is null)
+        {
+            country = new Country
             {
-                Id = index + 1,
-                Name = name,
-                CountryId = 1,
+                Name = CountryConstants.Türkiye.Name,
+                Code = CountryConstants.Türkiye.Code,
                 CreatedBy = "system",
                 UpdatedBy = "system",
                 CreateadAt = DateTime.UtcNow,
                 CreatedTime = new TimeOnly(0, 0),
                 UpdatedTime = new TimeOnly(0, 0)
-            })
-            .ToList();
+            };
+            await countryRepository.AddAsync(country, cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken); // Id almak için
+        }
+        var countryId = country.Id;
 
-        foreach (var item in provinces)
+        // ProvinceConstant üzerinden senkronizasyon (81 il)
+        foreach (var name in ProvinceConstant.Provinces)
         {
-            var existing = await provinceRepository.GetByExpressionWithTrackingAsync(p => p.Id == item.Id, cancellationToken);
+            var existing = await provinceRepository.GetByExpressionWithTrackingAsync(p => p.Name == name, cancellationToken);
             if (existing is null)
             {
-                await provinceRepository.AddAsync(item, cancellationToken);
+                var entity = new Province
+                {
+                    Name = name,
+                    CountryId = countryId,
+                    CreatedBy = "system",
+                    UpdatedBy = "system",
+                    CreateadAt = DateTime.UtcNow,
+                    CreatedTime = new TimeOnly(0, 0),
+                    UpdatedTime = new TimeOnly(0, 0)
+                };
+                await provinceRepository.AddAsync(entity, cancellationToken);
             }
             else
             {
-                existing.Name = item.Name;
-                existing.CountryId = item.CountryId;
+                existing.CountryId = countryId;
                 existing.UpdatedBy = "system";
                 existing.UpdatedTime = new TimeOnly(0, 0);
                 provinceRepository.Update(existing);
