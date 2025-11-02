@@ -12,7 +12,6 @@ internal sealed class SetProvinceCommandHandler(IProvinceRepository provinceRepo
 {
     public async Task<Result<string>> Handle(SetProvinceCommand request, CancellationToken cancellationToken)
     {
-        // Ülkeyi (Türkiye) garanti altına al ve Id'sini al
         var country = await countryRepository.GetByExpressionWithTrackingAsync(c => c.Name == CountryConstants.Türkiye.Name, cancellationToken);
         if (country is null)
         {
@@ -27,11 +26,9 @@ internal sealed class SetProvinceCommandHandler(IProvinceRepository provinceRepo
                 UpdatedTime = new TimeOnly(0, 0)
             };
             await countryRepository.AddAsync(country, cancellationToken);
-            await unitOfWork.SaveChangesAsync(cancellationToken); // Id almak için
+            await unitOfWork.SaveChangesAsync(cancellationToken); 
         }
         var countryId = country.Id;
-
-        // ProvinceConstant üzerinden senkronizasyon (81 il)
         foreach (var name in ProvinceConstant.Provinces)
         {
             var existing = await provinceRepository.GetByExpressionWithTrackingAsync(p => p.Name == name, cancellationToken);
