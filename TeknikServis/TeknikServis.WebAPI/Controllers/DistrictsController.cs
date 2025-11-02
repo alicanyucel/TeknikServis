@@ -23,6 +23,7 @@ public class DistrictsController : ApiController
             : BadRequest(new { success = false, message = "İlçe eklenemedi", errors = result.ErrorMessages });
     }
 
+
     [HttpGet]
     public async Task<IActionResult> GetAllDistricts([FromQuery] int? provinceId, CancellationToken cancellationToken)
     {
