@@ -53,11 +53,16 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
        .HasForeignKey(p => p.CountryId)
        .OnDelete(DeleteBehavior.Restrict);
 
+        // Veritabanında 'Code' kolonu yoksa sorgu hatasını engellemek için Code alanını geçici olarak ignore et
+        builder.Entity<Country>().Ignore(c => c.Code);
+
         builder.Entity<Province>()
             .HasMany(p => p.Districts)
             .WithOne(d => d.Province)
             .HasForeignKey(d => d.ProvinceId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // District -> Neighbourhood ve PostalCode konfigürasyonları kaldırıldı (domain modelinde yok)
 
         builder.Entity<AppRole>(b =>
         {
@@ -181,17 +186,8 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
-        // Product → Customer
-        builder.Entity<Product>(b =>
-        {
-            b.HasOne(p => p.Customer)
-                .WithMany(c => c.Products)
-                .HasForeignKey(p => p.CustomerId)
-                .OnDelete(DeleteBehavior.Restrict);
-        });
-
-        // Apply configurations
-        builder.ApplyConfigurationsFromAssembly(typeof(DependencyInjection).Assembly);
+        // Apply configurations from Infrastructure assembly
+        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
     private static ProductType ProductTypeFromName(string name)
