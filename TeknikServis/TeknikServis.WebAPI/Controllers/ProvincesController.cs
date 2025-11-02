@@ -21,7 +21,7 @@ public class ProvincesController : ApiController
         return result.IsSuccessful ? Ok(result) : BadRequest(result);
     }
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> GetAllProvinces(CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetAllProvincesQuery(), cancellationToken);

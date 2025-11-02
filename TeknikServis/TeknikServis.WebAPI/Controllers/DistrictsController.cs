@@ -24,7 +24,7 @@ public class DistrictsController : ApiController
     }
 
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> GetAllDistricts([FromQuery] int? provinceId, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetAllDistrictsQuery(provinceId), cancellationToken);

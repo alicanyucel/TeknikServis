@@ -23,7 +23,7 @@ public class CountriesController : ApiController
             : BadRequest(new { success = false, message = "Ülkeler eklenemedi", errors = result.ErrorMessages });
     }
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> GetAllCountries(CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetAllCountriesQuery(), cancellationToken);
