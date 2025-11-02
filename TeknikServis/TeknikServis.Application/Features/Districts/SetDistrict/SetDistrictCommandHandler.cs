@@ -30,7 +30,7 @@ internal sealed class SetDistrictCommandHandler(IDistrictRepository districtRepo
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        // Province’leri garanti altýna al (adýyla upsert)
+      
         var provinceNameToId = new Dictionary<string, int>();
         foreach (var name in ProvinceConstant.Provinces)
         {
@@ -53,7 +53,7 @@ internal sealed class SetDistrictCommandHandler(IDistrictRepository districtRepo
             provinceNameToId[name] = prov.Id;
         }
 
-        // Ýlçe senkronizasyonu
+       
         foreach (var (provinceIndex1Based, districtName) in DistrictConstant.Districts)
         {
             var provinceName = ProvinceConstant.Provinces[provinceIndex1Based - 1];

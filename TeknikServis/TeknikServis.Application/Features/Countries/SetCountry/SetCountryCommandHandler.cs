@@ -12,7 +12,7 @@ internal sealed class SetCountryCommandHandler(ICountryRepository countryReposit
 {
     public async Task<Result<string>> Handle(SetCountryCommand request, CancellationToken cancellationToken)
     {
-        // Sabitlerden (þimdilik sadece Türkiye) senkronize et
+     
         var items = new List<(string Name, string? Code)>
         {
             (CountryConstants.Türkiye.Name, CountryConstants.Türkiye.Code)
