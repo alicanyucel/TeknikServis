@@ -71,7 +71,8 @@ public static class DistrictConstant
         (32, "Aksu"), (32, "Atabey"), (32, "Eðirdir"), (32, "Gelendost"), (32, "Gönen"), (32, "Keçiborlu"), (32, "Merkez"), (32, "Senirkent"), (32, "Sütçüler"), (32, "Þarkikaraaðaç"), (32, "Uluborlu"), (32, "Yalvaç"), (32, "Yeniþarbademli"),
         // Mersin (33)
         (33, "Akdeniz"), (33, "Anamur"), (33, "Aydýncýk"), (33, "Bozyazý"), (33, "Çamlýyayla"), (33, "Erdemli"), (33, "Gülnar"), (33, "Mezitli"), (33, "Mut"), (33, "Silifke"), (33, "Tarsus"), (33, "Toroslar"), (33, "Yeniþehir"),
-        // Ýstanbul (34) - zaten mevcut
+        // Ýstanbul (34)
+        (34, "Adalar"), (34, "Arnavutköy"), (34, "Ataþehir"), (34, "Avcýlar"), (34, "Baðcýlar"), (34, "Bahçelievler"), (34, "Bakýrköy"), (34, "Baþakþehir"), (34, "Bayrampaþa"), (34, "Beþiktaþ"), (34, "Beykoz"), (34, "Beylikdüzü"), (34, "Beyoðlu"), (34, "Büyükçekmece"), (34, "Çatalca"), (34, "Çekmeköy"), (34, "Esenler"), (34, "Esenyurt"), (34, "Eyüpsultan"), (34, "Fatih"), (34, "Gaziosmanpaþa"), (34, "Güngören"), (34, "Kadýköy"), (34, "Kaðýthane"), (34, "Kartal"), (34, "Küçükçekmece"), (34, "Maltepe"), (34, "Pendik"), (34, "Sancaktepe"), (34, "Sarýyer"), (34, "Silivri"), (34, "Sultanbeyli"), (34, "Sultangazi"), (34, "Þile"), (34, "Þiþli"), (34, "Tuzla"), (34, "Ümraniye"), (34, "Üsküdar"), (34, "Zeytinburnu"),
         // Ýzmir (35)
         (35, "Aliaða"), (35, "Balçova"), (35, "Bayýndýr"), (35, "Bergama"), (35, "Beydað"), (35, "Bornova"), (35, "Buca"), (35, "Çeþme"), (35, "Çiðli"), (35, "Dikili"), (35, "Foça"), (35, "Gaziemir"), (35, "Güzelbahçe"), (35, "Karabaðlar"), (35, "Karaburun"), (35, "Karþýyaka"), (35, "Kemalpaþa"), (35, "Kýnýk"), (35, "Kiraz"), (35, "Konak"), (35, "Menderes"), (35, "Menemen"), (35, "Narlýdere"), (35, "Ödemiþ"), (35, "Seferihisar"), (35, "Selçuk"), (35, "Tire"), (35, "Torbalý"), (35, "Urla"),
         // Kars (36)
