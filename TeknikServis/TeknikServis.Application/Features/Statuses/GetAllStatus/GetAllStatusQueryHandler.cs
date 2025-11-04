@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.Linq;
 using TeknikServis.Application.Dtos;
 using TeknikServis.Application.Extensions;
 using TeknikServis.Domain.Repositories;
@@ -21,6 +22,7 @@ public sealed class GetAllStatusQueryHandler : IRequestHandler<GetAllStatusQuery
 
         var activeStatuses = statuses
             .Where(s => !s.IsDeleted)
+            .OrderBy(s => s.Name)
             .Select(s => new StatusDto(
                 Id: s.Id,
                 Name: s.Name,
@@ -33,9 +35,6 @@ public sealed class GetAllStatusQueryHandler : IRequestHandler<GetAllStatusQuery
                 IsDeleted: s.IsDeleted
             ))
             .ToList();
-
-        if (activeStatuses.Count == 0)
-            return Result<List<StatusDto>>.Failure("Hiç aktif durum bulunamadı.");
 
         return Result<List<StatusDto>>.Succeed(activeStatuses);
     }
