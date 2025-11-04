@@ -18,7 +18,7 @@ public sealed class DeleteProductCommandHandler : IRequestHandler<DeleteProductC
 
     public async Task<Result<string>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _productRepository.GetByExpressionAsync(
+        var product = await _productRepository.GetByExpressionWithTrackingAsync(
             x => x.Id == request.Id && !x.IsDeleted,
             cancellationToken
         );
@@ -28,7 +28,8 @@ public sealed class DeleteProductCommandHandler : IRequestHandler<DeleteProductC
 
         product.IsDeleted = true;
         product.UpdatedAt = DateTime.UtcNow;
-        product.UpdatedBy = "admin"; 
+        product.UpdatedBy = product.UpdatedBy ?? "system";
+        product.UpdatedTime = TimeOnly.FromDateTime(DateTime.UtcNow);
 
         _productRepository.Update(product);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
