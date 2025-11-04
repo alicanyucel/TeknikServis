@@ -62,7 +62,24 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
             .HasForeignKey(d => d.ProvinceId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // District -> Neighbourhood ve PostalCode konfigürasyonları kaldırıldı (domain modelinde yok)
+        // Customer relations
+        builder.Entity<Customer>(b =>
+        {
+            b.HasOne(c => c.Country)
+                .WithMany()
+                .HasForeignKey(c => c.CountryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            b.HasOne(c => c.Province)
+                .WithMany()
+                .HasForeignKey(c => c.ProvinceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            b.HasOne(c => c.District)
+                .WithMany()
+                .HasForeignKey(c => c.DistrictId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
         builder.Entity<AppRole>(b =>
         {

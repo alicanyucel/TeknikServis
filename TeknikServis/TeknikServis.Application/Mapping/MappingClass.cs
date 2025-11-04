@@ -42,8 +42,7 @@ public sealed class MappingProfile : Profile
 
         // Product ↔ Commands
         CreateMap<CreateProductCommand, Product>()
-            .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => ProductType.FromValue(src.ProductType)))
-            .ReverseMap();
+            .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => ProductType.FromValue(src.ProductType)));
 
         CreateMap<UpdateProductCommand, Product>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => ProductType.FromValue(src.ProductType)))
@@ -73,7 +72,10 @@ public sealed class MappingProfile : Profile
         // Customer ↔ Commands
         CreateMap<CreateCustomerCommand, Customer>()
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
-            .ForMember(dest => dest.CustomerType, opt => opt.MapFrom(src => CustomerType.FromValue(src.CustomerType)));
+            .ForMember(dest => dest.CustomerType, opt => opt.MapFrom(src => CustomerType.FromValue(src.CustomerType)))
+            .ForMember(dest => dest.CountryId, opt => opt.MapFrom(src => src.CountryId))
+            .ForMember(dest => dest.ProvinceId, opt => opt.MapFrom(src => src.ProvinceId))
+            .ForMember(dest => dest.DistrictId, opt => opt.MapFrom(src => src.DistrictId));
 
         CreateMap<UpdateCustomerCommand, Customer>()
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))

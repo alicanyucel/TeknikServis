@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using TeknikServis.Application.Extensions;
+using TeknikServis.Domain.Enums;
 
 namespace TeknikServis.Application.Features.Products.CreateProduct;
 
@@ -25,6 +27,7 @@ public sealed class CreateProductCommandValidator : AbstractValidator<CreateProd
             .NotEmpty().WithMessage("CustomerId boş olamaz.");
 
         RuleFor(x => x.ProductType)
-            .IsInEnum().WithMessage("Geçersiz ürün tipi.");
+            .IsValidSmartEnumValue<CreateProductCommand, ProductType>()
+            .WithMessage("Geçersiz ürün tipi.");
     }
 }

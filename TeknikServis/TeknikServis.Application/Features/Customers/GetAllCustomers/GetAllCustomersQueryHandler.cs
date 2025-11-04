@@ -20,6 +20,9 @@ internal sealed class GetAllCustomerQueryHandler : IRequestHandler<GetAllCustome
         var customers = await _customerRepository
             .GetAll()
             .Where(x => !x.IsDeleted)
+            .Include(x => x.Country)
+            .Include(x => x.Province)
+            .Include(x => x.District)
             .ToListAsync(cancellationToken);
 
         return Result<List<Customer>>.Succeed(customers);

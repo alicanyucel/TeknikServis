@@ -9,12 +9,5 @@ public sealed record CreateProductCommand(
  string SerialNumber,
  string Description,
  Guid CustomerId,
- int ProductType,
- TimeOnly UpdatedTime,
- string UpdatedBy,
- string CreatedBy,
- TimeOnly CratedTime,
- DateTime CreateadAt,
- DateTime? UpdatedAt,
- bool IsDeleted
+ int ProductType
 ) : IRequest<Result<string>>;

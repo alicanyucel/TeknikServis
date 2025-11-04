@@ -40,5 +40,19 @@ public sealed class CreateCustomerCommandValidator : AbstractValidator<CreateCus
                 .NotEmpty().WithMessage("Tüzel müşteri için Vergi No zorunludur.")
                 .Matches(@"^\d{10}$").WithMessage("Vergi No 10 haneli olmalıdır.");
         });
+
+        RuleFor(x => x.CountryId)
+      .NotEmpty().WithMessage("Ülke seçimi zorunludur.")
+      .GreaterThan(0).WithMessage("Geçersiz ülke.");
+
+        RuleFor(x => x.ProvinceId)
+            .NotEmpty().WithMessage("İl seçimi zorunludur.")
+            .GreaterThan(0).WithMessage("Geçersiz il.");
+
+        RuleFor(x => x.DistrictId)
+            .NotEmpty().WithMessage("İlçe seçimi zorunludur.")
+            .GreaterThan(0).WithMessage("Geçersiz ilçe.");
+
+
     }
 }
